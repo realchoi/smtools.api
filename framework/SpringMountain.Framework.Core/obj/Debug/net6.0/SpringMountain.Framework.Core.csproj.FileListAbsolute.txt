@@ -1,0 +1,12 @@
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Core\bin\Debug\net6.0\SpringMountain.Framework.Core.deps.json
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Core\bin\Debug\net6.0\SpringMountain.Framework.Core.dll
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Core\bin\Debug\net6.0\SpringMountain.Framework.Core.pdb
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Core\obj\Debug\net6.0\SpringMountain.Framework.Core.csproj.AssemblyReference.cache
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Core\obj\Debug\net6.0\SpringMountain.Framework.Core.GeneratedMSBuildEditorConfig.editorconfig
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Core\obj\Debug\net6.0\SpringMountain.Framework.Core.AssemblyInfoInputs.cache
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Core\obj\Debug\net6.0\SpringMountain.Framework.Core.AssemblyInfo.cs
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Core\obj\Debug\net6.0\SpringMountain.Framework.Core.csproj.CoreCompileInputs.cache
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Core\obj\Debug\net6.0\SpringMountain.Framework.Core.dll
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Core\obj\Debug\net6.0\refint\SpringMountain.Framework.Core.dll
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Core\obj\Debug\net6.0\SpringMountain.Framework.Core.pdb
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Core\obj\Debug\net6.0\ref\SpringMountain.Framework.Core.dll

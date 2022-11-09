@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Npgsql" Version="6.0.7" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\framework\SpringMountain.Framework.EfCore\SpringMountain.Framework.EfCore.csproj" />
+    <ProjectReference Include="..\..\framework\SpringMountain.Modularity\SpringMountain.Modularity.csproj" />
+    <ProjectReference Include="..\SmTools.Api.Core\SmTools.Api.Core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,12 @@
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Modularity\bin\Debug\net6.0\SpringMountain.Modularity.deps.json
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Modularity\bin\Debug\net6.0\SpringMountain.Modularity.dll
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Modularity\bin\Debug\net6.0\SpringMountain.Modularity.pdb
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Modularity\obj\Debug\net6.0\SpringMountain.Modularity.csproj.AssemblyReference.cache
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Modularity\obj\Debug\net6.0\SpringMountain.Modularity.GeneratedMSBuildEditorConfig.editorconfig
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Modularity\obj\Debug\net6.0\SpringMountain.Modularity.AssemblyInfoInputs.cache
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Modularity\obj\Debug\net6.0\SpringMountain.Modularity.AssemblyInfo.cs
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Modularity\obj\Debug\net6.0\SpringMountain.Modularity.csproj.CoreCompileInputs.cache
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Modularity\obj\Debug\net6.0\SpringMountain.Modularity.dll
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Modularity\obj\Debug\net6.0\refint\SpringMountain.Modularity.dll
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Modularity\obj\Debug\net6.0\SpringMountain.Modularity.pdb
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Modularity\obj\Debug\net6.0\ref\SpringMountain.Modularity.dll

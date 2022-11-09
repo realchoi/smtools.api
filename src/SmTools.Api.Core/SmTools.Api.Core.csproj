@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\framework\SpringMountain.Framework.Uow\SpringMountain.Framework.Uow.csproj" />
+    <ProjectReference Include="..\..\framework\SpringMountain.Modularity\SpringMountain.Modularity.csproj" />
+  </ItemGroup>
+
+</Project>

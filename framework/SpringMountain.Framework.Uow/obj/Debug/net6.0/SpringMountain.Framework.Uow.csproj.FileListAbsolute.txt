@@ -1,0 +1,17 @@
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Uow\bin\Debug\net6.0\SpringMountain.Framework.Uow.deps.json
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Uow\bin\Debug\net6.0\SpringMountain.Framework.Uow.dll
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Uow\bin\Debug\net6.0\SpringMountain.Framework.Uow.pdb
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Uow\bin\Debug\net6.0\SpringMountain.Modularity.dll
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Uow\bin\Debug\net6.0\SpringMountain.Modularity.pdb
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Uow\obj\Debug\net6.0\SpringMountain.Framework.Uow.csproj.AssemblyReference.cache
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Uow\obj\Debug\net6.0\SpringMountain.Framework.Uow.GeneratedMSBuildEditorConfig.editorconfig
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Uow\obj\Debug\net6.0\SpringMountain.Framework.Uow.AssemblyInfoInputs.cache
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Uow\obj\Debug\net6.0\SpringMountain.Framework.Uow.AssemblyInfo.cs
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Uow\obj\Debug\net6.0\SpringMountain.Framework.Uow.csproj.CoreCompileInputs.cache
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Uow\obj\Debug\net6.0\SpringMountain.Framework.Uow.csproj.CopyComplete
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Uow\obj\Debug\net6.0\SpringMountain.Framework.Uow.dll
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Uow\obj\Debug\net6.0\refint\SpringMountain.Framework.Uow.dll
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Uow\obj\Debug\net6.0\SpringMountain.Framework.Uow.pdb
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Uow\obj\Debug\net6.0\ref\SpringMountain.Framework.Uow.dll
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Uow\bin\Debug\net6.0\SpringMountain.Framework.Core.dll
+D:\001.HelloWorld\001.DotNetProject\smtools\framework\SpringMountain.Framework.Uow\bin\Debug\net6.0\SpringMountain.Framework.Core.pdb
