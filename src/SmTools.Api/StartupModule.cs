@@ -6,10 +6,10 @@ using SmTools.Api.Application;
 using SmTools.Api.Filters;
 using SmTools.Api.Helpers;
 using SmTools.Api.Routings;
+using SpringMountain.Framework.Snowflake;
 using SpringMountain.Modularity;
 using SpringMountain.Modularity.Attribute;
 using Swashbuckle.AspNetCore.Filters;
-using System.Reflection;
 using System.Text;
 
 namespace SmTools.Api;
@@ -105,6 +105,11 @@ public class StartupModule : CoreModuleBase
         // 注入 JwtHelper，单例模式
         services.AddSingleton(new JwtHelper(configuration));
         #endregion
+
+        services.AddSnowflake(option =>
+        {
+
+        });
     }
 
     /// <summary>

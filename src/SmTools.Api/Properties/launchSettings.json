@@ -12,7 +12,7 @@
     "SmTools.Api": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "swagger/index.html",
       "applicationUrl": "http://localhost:5118",
       "environmentVariables": {

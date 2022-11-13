@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\framework\SpringMountain.Framework.Uow\SpringMountain.Framework.Uow.csproj" />
     <ProjectReference Include="..\..\framework\SpringMountain.Modularity\SpringMountain.Modularity.csproj" />
+    <ProjectReference Include="..\SmTools.Api.Model\SmTools.Api.Model.csproj" />
   </ItemGroup>
 
 </Project>
