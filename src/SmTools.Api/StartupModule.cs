@@ -9,6 +9,7 @@ using SmTools.Api.Routings;
 using SpringMountain.Modularity;
 using SpringMountain.Modularity.Attribute;
 using Swashbuckle.AspNetCore.Filters;
+using System.Reflection;
 using System.Text;
 
 namespace SmTools.Api;
@@ -61,6 +62,10 @@ public class StartupModule : CoreModuleBase
             {
                 Version = "v1",
                 Title = "SmTools.Api"
+            });
+            Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "*.xml").ToList().ForEach(file =>
+            {
+                options.IncludeXmlComments(file, true);
             });
             options.OperationFilter<AddResponseHeadersFilter>();
             options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
