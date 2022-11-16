@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SmTools.Api.Application;
+using SmTools.Api.Extensions;
 using SmTools.Api.Filters;
 using SmTools.Api.Helpers;
 using SmTools.Api.Routings;
@@ -106,10 +107,16 @@ public class StartupModule : CoreModuleBase
         services.AddSingleton(new JwtHelper(configuration));
         #endregion
 
+        #region 雪花算法
         services.AddSnowflake(option =>
         {
 
         });
+        #endregion
+
+        #region 模型绑定异常处理配置
+        services.ConfigureModelBindingErrorHandling();
+        #endregion
     }
 
     /// <summary>
@@ -147,6 +154,9 @@ public class StartupModule : CoreModuleBase
         app.UseAuthentication();
         // 再授权
         app.UseAuthorization();
+
+        // 自定义异常处理中间件
+        app.UseErrorHandlingMiddleware();
 
         app.UseEndpoints(endpoints =>
         {
