@@ -110,7 +110,7 @@ public class StartupModule : CoreModuleBase
         #region 雪花算法
         services.AddSnowflake(option =>
         {
-
+            option.WorkId = 1;
         });
         #endregion
 
