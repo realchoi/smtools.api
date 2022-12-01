@@ -1,4 +1,4 @@
-﻿namespace SmTools.Api.Model.Account.dtos;
+﻿namespace SmTools.Api.Model.Account.Dtos;
 
 /// <summary>
 /// 用户注册入参

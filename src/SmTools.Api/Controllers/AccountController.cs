@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmTools.Api.Helpers;
-using SmTools.Api.Model.Account.dtos;
+using SmTools.Api.Model.Account.Dtos;
 using SpringMountain.Framework.Snowflake;
 
 namespace SmTools.Api.Controllers;
