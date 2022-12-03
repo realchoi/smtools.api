@@ -3,7 +3,10 @@ using SpringMountain.Framework.Domain.Entities;
 
 namespace SmTools.Api.Core.Accounts;
 
-public class UserInfo : Entity<int>, IHasTimeAuditing
+/// <summary>
+/// 用户资料信息表
+/// </summary>
+public class UserInfo : Entity<long>, IHasTimeAuditing
 {
     /// <summary>
     /// 昵称

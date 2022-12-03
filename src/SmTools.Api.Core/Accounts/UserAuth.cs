@@ -4,12 +4,16 @@ using SpringMountain.Framework.Domain.Entities;
 
 namespace SmTools.Api.Core.Accounts;
 
-public class UserAuth : Entity<int>, IHasTimeAuditing
+/// <summary>
+/// 用户认证表
+/// 参考：http://wpceo.com/user-database-table-design/
+/// </summary>
+public class UserAuth : Entity<long>, IHasTimeAuditing
 {
     /// <summary>
     /// 用户 Id，关联 user_info 表的主键
     /// </summary>
-    public int UserId { get; set; }
+    public long UserId { get; set; }
 
     /// <summary>
     /// 登录类型
