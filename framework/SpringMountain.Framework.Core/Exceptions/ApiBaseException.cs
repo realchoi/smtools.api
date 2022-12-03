@@ -1,4 +1,5 @@
 ﻿using SpringMountain.Framework.Exceptions.Enums;
+using System.Collections;
 using System.Net;
 
 namespace SpringMountain.Framework.Exceptions;
@@ -26,7 +27,7 @@ public class ApiBaseException : Exception
     /// <summary>
     /// 异常详情
     /// </summary>
-    public IEnumerable<string> Details { get; set; } = new List<string>();
+    public IEnumerable Details { get; set; } = new List<string>();
 
     public ApiBaseException()
     {
@@ -37,7 +38,7 @@ public class ApiBaseException : Exception
     {
     }
 
-    public ApiBaseException(string message, IEnumerable<string> details)
+    public ApiBaseException(string message, IEnumerable details)
         : base(message)
     {
         Details = details;
@@ -48,7 +49,7 @@ public class ApiBaseException : Exception
     {
     }
 
-    public ApiBaseException(string message, IEnumerable<string> details, Exception exception)
+    public ApiBaseException(string message, IEnumerable details, Exception exception)
         : base(message, exception)
     {
         Details = details;

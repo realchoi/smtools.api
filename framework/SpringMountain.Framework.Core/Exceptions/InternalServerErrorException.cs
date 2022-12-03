@@ -1,4 +1,5 @@
 ﻿using SpringMountain.Framework.Exceptions.Enums;
+using System.Collections;
 using System.Net;
 
 namespace SpringMountain.Framework.Exceptions;
@@ -36,14 +37,14 @@ public class InternalServerErrorException : ApiBaseException
         Message = message;
     }
 
-    public InternalServerErrorException(string message, IEnumerable<string> details)
+    public InternalServerErrorException(string message, IEnumerable details)
         : base(message)
     {
         Message = message;
         base.Details = details;
     }
 
-    public InternalServerErrorException(string message, IEnumerable<string> details, Exception exception)
+    public InternalServerErrorException(string message, IEnumerable details, Exception exception)
         : base(message, exception)
     {
         Message = message;

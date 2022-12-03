@@ -105,6 +105,7 @@ public class StartupModule : CoreModuleBase
 
         // 注入 JwtHelper，单例模式
         services.AddSingleton(new JwtHelper(configuration));
+        services.AddSingleton(new HashingHelper());
         #endregion
 
         #region 雪花算法

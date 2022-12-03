@@ -86,7 +86,7 @@ public static class EfCoreServiceCollectionExtensions
             throw new ArgumentException($"参数 {nameof(entityType)} 的类型错误，该类型必须继承自 [{nameof(IEntity)}]");
         }
 
-        if (typeof(DbContext).IsAssignableFrom(dbContextType))
+        if (!typeof(DbContext).IsAssignableFrom(dbContextType))
         {
             throw new ArgumentException($"参数 {nameof(dbContextType)} 的类型错误，该类型必须继承自 [{nameof(DbContext)}]");
         }

@@ -34,7 +34,7 @@ public class AccountController : ControllerBase
     [HttpGet("token")]
     public ActionResult<string> GetToken()
     {
-        return _jwtHelper.CreateToken();
+        return _jwtHelper.CreateToken(new Core.Accounts.UserInfo() { NickName = "test_user" });
     }
 
     /// <summary>
@@ -51,25 +51,24 @@ public class AccountController : ControllerBase
     /// <summary>
     /// 用户注册
     /// </summary>
-    /// <param name="inputDto"></param>
+    /// <param name="registerDto"></param>
     /// <returns></returns>
     [HttpPost("register")]
-    public async Task<JsonResult> Register(RegisterInputDto inputDto)
+    public async Task<JsonResult> Register(RegisterInputDto registerDto)
     {
-        var id = _snowflakeIdMaker.NextId();
-        Console.WriteLine(id);
-        return new JsonResult(new { Id = id });
+        var result = await _accountAppService.Register(registerDto);
+        return new JsonResult(result);
     }
 
     /// <summary>
     /// 用户登录
     /// </summary>
-    /// <param name="inputDto"></param>
+    /// <param name="loginDto"></param>
     /// <returns></returns>
     [HttpPost("login")]
-    public async Task<JsonResult> Login(LoginInputDto inputDto)
+    public async Task<JsonResult> Login(LoginInputDto loginDto)
     {
-        var result = _accountAppService.Login(inputDto);
+        var result = await _accountAppService.Login(loginDto);
         return new JsonResult(result);
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using SmTools.Api.Core.Accounts;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace SmTools.Api.Core.Helpers;
@@ -21,17 +23,19 @@ public class JwtHelper
     /// <summary>
     /// 生成 jwt token
     /// </summary>
+    /// <param name="userInfo">用户资料信息</param>
     /// <returns></returns>
-    public string CreateToken()
+    public string CreateToken(UserInfo userInfo)
     {
         // 1. 定义需要使用到的 Claims
         var claims = new Claim[]
         {
-            new Claim(ClaimTypes.Name, "admin"),    // HttpContext.User.Identity.Name
-            new Claim(ClaimTypes.Role, "admin"),    // HttpContext.User.IsInRole("admin")
-            new Claim(JwtRegisteredClaimNames.Jti, "admin"),
-            new Claim("UserName", "Admin"),
-            new Claim("Name", "超级管理员")
+            new Claim(ClaimTypes.NameIdentifier, userInfo.Id.ToString()),
+            new Claim(ClaimTypes.Name, userInfo.NickName),    // HttpContext.User.Identity.Name
+            //new Claim(ClaimTypes.Role, "admin"),    // HttpContext.User.IsInRole("admin")
+            //new Claim(JwtRegisteredClaimNames.Jti, "admin"),
+            //new Claim("UserName", "Admin"),
+            new Claim("Name", userInfo.NickName)
         };
 
         // 2. 从 appsettings.json 中读取 SecretKey
@@ -57,5 +61,15 @@ public class JwtHelper
         var token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
 
         return token;
+    }
+
+    /// <summary>
+    /// 生成 jwt 的 SecretKey
+    /// </summary>
+    /// <returns></returns>
+    public string GenerateSecureSecret()
+    {
+        var hmac = new HMACSHA256();
+        return Convert.ToBase64String(hmac.Key);
     }
 }

@@ -1,8 +1,11 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using SmTools.Api.Core;
 using SpringMountain.Modularity;
 using SpringMountain.Modularity.Attribute;
+using System.Diagnostics;
 
 namespace SmTools.Api.Persistence;
 
@@ -27,12 +30,15 @@ public class PersistenceModule : CoreModuleBase
     {
         var services = context.Services;
 
-        /*services.AddDbContext<SmToolDbContext>(options =>
+        services.AddDbContext<SmToolDbContext>(options =>
         {
-            options.UseNpgsql(Configuration["Db:SmTool:ConnectionString"]);
+            options.UseNpgsql(Configuration["Db:SmTools:ConnectionString"]);
+#if DEBUG
+            options.LogTo((s => Debug.WriteLine(s)), minimumLevel: LogLevel.Information);
+#endif
         });
 
-        services.AddRepositories<SmToolDbContext>();*/
+        services.AddRepositories<SmToolDbContext>();
         AddRepositories(services);
     }
 
