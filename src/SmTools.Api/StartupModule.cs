@@ -5,7 +5,7 @@ using Microsoft.OpenApi.Models;
 using SmTools.Api.Application;
 using SmTools.Api.Extensions;
 using SmTools.Api.Filters;
-using SmTools.Api.Helpers;
+using SmTools.Api.Core.Helpers;
 using SmTools.Api.Routings;
 using SpringMountain.Framework.Snowflake;
 using SpringMountain.Modularity;

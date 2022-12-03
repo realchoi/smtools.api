@@ -1,10 +1,14 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace SmTools.Api.Helpers;
+namespace SmTools.Api.Core.Helpers;
 
+/// <summary>
+/// jwt 签发
+/// </summary>
 public class JwtHelper
 {
     private readonly IConfiguration _configuration;

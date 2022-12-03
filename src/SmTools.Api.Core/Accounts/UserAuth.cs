@@ -1,4 +1,4 @@
-﻿using SmTools.Api.Model.Account;
+﻿using SmTools.Api.Model.Accounts;
 using SpringMountain.Framework.Domain.Auditing;
 using SpringMountain.Framework.Domain.Entities;
 

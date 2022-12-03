@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.10.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\framework\SpringMountain.Framework.Uow\SpringMountain.Framework.Uow.csproj" />
     <ProjectReference Include="..\..\framework\SpringMountain.Modularity\SpringMountain.Modularity.csproj" />
     <ProjectReference Include="..\SmTools.Api.Model\SmTools.Api.Model.csproj" />

@@ -1,4 +1,4 @@
-﻿namespace SmTools.Api.Model.Account;
+﻿namespace SmTools.Api.Model.Accounts;
 
 /// <summary>
 /// 登录类型枚举

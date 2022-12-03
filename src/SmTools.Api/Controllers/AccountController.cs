@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SmTools.Api.Helpers;
-using SmTools.Api.Model.Account.Dtos;
+using SmTools.Api.Application.Accounts;
+using SmTools.Api.Core.Helpers;
+using SmTools.Api.Model.Accounts.Dtos;
 using SpringMountain.Framework.Snowflake;
 
 namespace SmTools.Api.Controllers;
@@ -15,11 +16,15 @@ public class AccountController : ControllerBase
 {
     private readonly JwtHelper _jwtHelper;
     private readonly ISnowflakeIdMaker _snowflakeIdMaker;
+    private readonly IAccountAppService _accountAppService;
 
-    public AccountController(JwtHelper jwtHelper, ISnowflakeIdMaker snowflakeIdMaker)
+    public AccountController(JwtHelper jwtHelper,
+        ISnowflakeIdMaker snowflakeIdMaker,
+        IAccountAppService accountAppService)
     {
         _jwtHelper = jwtHelper;
         _snowflakeIdMaker = snowflakeIdMaker;
+        _accountAppService = accountAppService;
     }
 
     /// <summary>
@@ -64,6 +69,7 @@ public class AccountController : ControllerBase
     [HttpPost("login")]
     public async Task<JsonResult> Login(LoginInputDto inputDto)
     {
-        return new JsonResult(inputDto);
+        var result = _accountAppService.Login(inputDto);
+        return new JsonResult(result);
     }
 }
