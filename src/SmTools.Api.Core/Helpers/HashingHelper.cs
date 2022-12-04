@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography;
+using System.Text;
 
 namespace SmTools.Api.Core.Helpers;
 
@@ -23,5 +24,24 @@ public class HashingHelper
         var derivedRandomKey = bytes.GetBytes(32);
         var hash = Convert.ToBase64String(derivedRandomKey);
         return hash;
+    }
+
+    /// <summary>
+    /// 获取盐值
+    /// </summary>
+    /// <param name="n"></param>
+    /// <returns></returns>
+    public static string GetSalt(int n)
+    {
+        char[] chars = ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
+                "1234567890!@#$%^&*()_+").ToCharArray();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < n; i++)
+        {
+            //Random().nextInt()返回值为[0,n)
+            char aChar = chars[new Random().NextInt64(chars.Length)];
+            sb.Append(aChar);
+        }
+        return sb.ToString();
     }
 }

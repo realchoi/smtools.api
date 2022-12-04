@@ -56,13 +56,17 @@ public class AccountAppService : IAccountAppService
             NickName = registerDto.NickName
         };
         await _userInfoRepository.AddAsync(userInfo);
-        var passwordHash = HashingHelper.HashUsingPbkdf2(registerDto.Credential, "smtools");
+        //var rnd = new Random();
+        //var n = rnd.Next(128);
+        var salt = Base64Helper.Base64Encode(HashingHelper.GetSalt(128));
+        var passwordHash = HashingHelper.HashUsingPbkdf2(registerDto.Credential, salt);
         var userAuth = new UserAuth
         {
             UserId = userInfo.Id,
             IdentityType = registerDto.IdentityType,
             Identifier = registerDto.Identifier,
-            Credential = passwordHash
+            Credential = passwordHash,
+            Salt = salt
         };
         await _userAuthRepository.AddAsync(userAuth);
         await _unitOfWorkManager.Current!.SaveChangesAsync();
@@ -90,8 +94,8 @@ public class AccountAppService : IAccountAppService
         {
             throw new NotFoundException("用户不存在");
         }
-        var passwordHash = HashingHelper.HashUsingPbkdf2(loginDto.Credential, "smtools");
-        if (loginDto.Credential != passwordHash)
+        var passwordHash = HashingHelper.HashUsingPbkdf2(loginDto.Credential, userAuth.Salt);
+        if (userAuth.Credential != passwordHash)
         {
             throw new InvalidParameterException("密码不正确");
         }

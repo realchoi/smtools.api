@@ -31,6 +31,11 @@ public class UserAuth : Entity<long>, IHasTimeAuditing
     public string Credential { get; set; }
 
     /// <summary>
+    /// 密码加盐的盐值
+    /// </summary>
+    public string Salt { get; set; }
+
+    /// <summary>
     /// 创建时间
     /// </summary>
     public DateTime CreationTime { get; set; }

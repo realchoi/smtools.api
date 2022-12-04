@@ -21,7 +21,7 @@ public class UserInfo : Entity<long>, IHasTimeAuditing
     /// <summary>
     /// 头像 URL
     /// </summary>
-    public string Avatar { get; set; }
+    public string? Avatar { get; set; }
 
     /// <summary>
     /// 创建时间

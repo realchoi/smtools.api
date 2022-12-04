@@ -1,11 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using SmTools.Api.Application;
+using SmTools.Api.Core.Helpers;
 using SmTools.Api.Extensions;
 using SmTools.Api.Filters;
-using SmTools.Api.Core.Helpers;
 using SmTools.Api.Routings;
 using SpringMountain.Framework.Snowflake;
 using SpringMountain.Modularity;
@@ -113,6 +114,15 @@ public class StartupModule : CoreModuleBase
         {
             option.WorkId = 1;
         });
+        #endregion
+
+        #region HttpContextAccessor
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        #endregion
+
+        #region MediatR 中介者
+        services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies()
+            .Where(c => c.FullName != null && c.FullName.StartsWith("SmTools.Api")).ToArray());
         #endregion
 
         #region 模型绑定异常处理配置
