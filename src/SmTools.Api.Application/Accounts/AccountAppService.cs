@@ -43,8 +43,7 @@ public class AccountAppService : IAccountAppService
     public async Task<RegisterOutputDto> Register(RegisterInputDto registerDto)
     {
         var exist = await _userAuthRepository.GetQueryable()
-            .AnyAsync(p => p.IdentityType == registerDto.IdentityType
-            && p.Identifier == registerDto.Identifier && p.Credential == registerDto.Credential);
+            .AnyAsync(p => p.IdentityType == registerDto.IdentityType && p.Identifier == registerDto.Identifier);
         if (exist)
         {
             throw new InvalidParameterException("当前用户已存在，请换一个后再试");
@@ -56,9 +55,9 @@ public class AccountAppService : IAccountAppService
             NickName = registerDto.NickName
         };
         await _userInfoRepository.AddAsync(userInfo);
-        //var rnd = new Random();
-        //var n = rnd.Next(128);
-        var salt = Base64Helper.Base64Encode(HashingHelper.GetSalt(128));
+        var rnd = new Random();
+        var n = rnd.Next(1, 128);
+        var salt = Base64Helper.Base64Encode(HashingHelper.GetSalt(n));
         var passwordHash = HashingHelper.HashUsingPbkdf2(registerDto.Credential, salt);
         var userAuth = new UserAuth
         {

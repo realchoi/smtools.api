@@ -13,7 +13,7 @@ public class LoginOutputDto
     /// <summary>
     /// 头像 URL
     /// </summary>
-    public string Avatar { get; set; }
+    public string? Avatar { get; set; }
 
     /// <summary>
     /// JWT Token
