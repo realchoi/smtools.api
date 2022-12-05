@@ -21,7 +21,7 @@ public static class ModelBindingErrorHandlingExtension
             {
                 var error = actionContext.ModelState?.FirstOrDefault(e => e.Value?.Errors.Count > 0).Value;
                 // 记录日志
-                var logger = services.BuildServiceProvider().GetRequiredService<ILogger>();
+                var logger = services.BuildServiceProvider().GetRequiredService<ILogger<StartupModule>>();
                 logger.LogError(new EventId(0), error?.Errors.First().Exception, $"入参解析失败：{error?.Errors.First().ErrorMessage}");
                 logger.LogDebug($"入参解析失败：{error?.Errors.First().ErrorMessage}");
                 // 返回自定义异常信息
