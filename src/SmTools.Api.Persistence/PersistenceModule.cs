@@ -34,7 +34,7 @@ public class PersistenceModule : CoreModuleBase
         {
             options.UseNpgsql(Configuration["Db:SmTools:ConnectionString"]);
 #if DEBUG
-            options.LogTo((s => Debug.WriteLine(s)), minimumLevel: LogLevel.Information);
+            options.LogTo(s => Debug.WriteLine(s), minimumLevel: LogLevel.Information);
 #endif
         });
 
