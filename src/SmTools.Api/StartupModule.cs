@@ -72,6 +72,7 @@ public class StartupModule : CoreModuleBase
             options.OperationFilter<AddResponseHeadersFilter>();
             options.OperationFilter<AppendAuthorizeToSummaryOperationFilter>();
             options.OperationFilter<SecurityRequirementsOperationFilter>(true, "Bearer");
+            options.SchemaFilter<SwaggerAddEnumDescriptionFilter>();
             // 权限 token
             options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
             {
