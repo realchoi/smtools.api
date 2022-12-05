@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using SmTools.Api.Application.Accounts;
 using SmTools.Api.Core.Helpers;
 using SmTools.Api.Model.Accounts.Dtos;
+using SpringMountain.Framework.Core.Exceptions;
+using SpringMountain.Framework.Exceptions;
 using SpringMountain.Framework.Snowflake;
 
 namespace SmTools.Api.Controllers;
@@ -51,24 +53,36 @@ public class AccountController : ControllerBase
     /// <summary>
     /// 用户注册
     /// </summary>
-    /// <param name="registerDto"></param>
+    /// <param name="registerInput"></param>
     /// <returns></returns>
     [HttpPost("register")]
-    public async Task<JsonResult> Register(RegisterInputDto registerDto)
+    public async Task<JsonResult> Register(RegisterInputDto registerInput)
     {
-        var result = await _accountAppService.Register(registerDto);
+        var result = await _accountAppService.Register(registerInput);
         return new JsonResult(result);
     }
 
     /// <summary>
     /// 用户登录
     /// </summary>
-    /// <param name="loginDto"></param>
+    /// <param name="loginInput"></param>
     /// <returns></returns>
     [HttpPost("login")]
-    public async Task<JsonResult> Login(LoginInputDto loginDto)
+    public async Task<JsonResult> Login(LoginInputDto loginInput)
     {
-        var result = await _accountAppService.Login(loginDto);
+        var result = await _accountAppService.Login(loginInput);
+        return new JsonResult(result);
+    }
+
+    /// <summary>
+    /// 修改密码
+    /// </summary>
+    /// <param name="changePasswordInput"></param>
+    /// <returns></returns>
+    [HttpPost("password/change")]
+    public async Task<JsonResult> ChangePassword(ChangePasswordInputDto changePasswordInput)
+    {
+        var result = await _accountAppService.ChangePassword(changePasswordInput);
         return new JsonResult(result);
     }
 }

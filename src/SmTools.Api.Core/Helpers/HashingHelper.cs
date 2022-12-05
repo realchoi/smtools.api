@@ -27,11 +27,11 @@ public class HashingHelper
     }
 
     /// <summary>
-    /// 获取盐值
+    /// 生成随机盐值
     /// </summary>
     /// <param name="n"></param>
     /// <returns></returns>
-    public static string GetSalt(int n)
+    public static string GenerateSalt(int n)
     {
         char[] chars = ("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" +
                 "1234567890!@#$%^&*()_+").ToCharArray();

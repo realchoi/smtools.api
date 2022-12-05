@@ -10,15 +10,24 @@ public interface IAccountAppService
     /// <summary>
     /// 用户注册
     /// </summary>
-    /// <param name="registerDto"></param>
+    /// <param name="registerInput"></param>
     /// <returns></returns>
     /// <exception cref="InvalidParameterException"></exception>
-    Task<RegisterOutputDto> Register(RegisterInputDto registerDto);
+    Task<RegisterOutputDto> Register(RegisterInputDto registerInput);
 
     /// <summary>
     /// 用户登录
     /// </summary>
-    /// <param name="login"></param>
+    /// <param name="loginInput"></param>
     /// <returns></returns>
-    Task<LoginOutputDto> Login(LoginInputDto login);
+    Task<LoginOutputDto> Login(LoginInputDto loginInput);
+
+    /// <summary>
+    /// 修改密码
+    /// </summary>
+    /// <param name="changePasswordInput"></param>
+    /// <returns></returns>
+    /// <exception cref="NotFoundException"></exception>
+    /// <exception cref="InvalidParameterException"></exception>
+    Task<ChangePasswordOutputDto> ChangePassword(ChangePasswordInputDto changePasswordInput);
 }

@@ -37,13 +37,13 @@ public class AccountAppService : IAccountAppService
     /// <summary>
     /// 用户注册
     /// </summary>
-    /// <param name="registerDto"></param>
+    /// <param name="registerInput"></param>
     /// <returns></returns>
     /// <exception cref="InvalidParameterException"></exception>
-    public async Task<RegisterOutputDto> Register(RegisterInputDto registerDto)
+    public async Task<RegisterOutputDto> Register(RegisterInputDto registerInput)
     {
         var exist = await _userAuthRepository.GetQueryable()
-            .AnyAsync(p => p.IdentityType == registerDto.IdentityType && p.Identifier == registerDto.Identifier);
+            .AnyAsync(p => p.IdentityType == registerInput.IdentityType && p.Identifier == registerInput.Identifier);
         if (exist)
         {
             throw new InvalidParameterException("当前用户已存在，请换一个后再试");
@@ -51,19 +51,19 @@ public class AccountAppService : IAccountAppService
         var userInfo = new UserInfo
         {
             Id = _snowflakeIdMaker.NextId(),
-            UserName = registerDto.UserName,
-            NickName = registerDto.NickName
+            UserName = registerInput.UserName,
+            NickName = registerInput.NickName
         };
         await _userInfoRepository.AddAsync(userInfo);
         var rnd = new Random();
         var n = rnd.Next(1, 128);
-        var salt = Base64Helper.Base64Encode(HashingHelper.GetSalt(n));
-        var passwordHash = HashingHelper.HashUsingPbkdf2(registerDto.Credential, salt);
+        var salt = Base64Helper.Base64Encode(HashingHelper.GenerateSalt(n));
+        var passwordHash = HashingHelper.HashUsingPbkdf2(registerInput.Credential, salt);
         var userAuth = new UserAuth
         {
             UserId = userInfo.Id,
-            IdentityType = registerDto.IdentityType,
-            Identifier = registerDto.Identifier,
+            IdentityType = registerInput.IdentityType,
+            Identifier = registerInput.Identifier,
             Credential = passwordHash,
             Salt = salt
         };
@@ -71,29 +71,29 @@ public class AccountAppService : IAccountAppService
         await _unitOfWorkManager.Current!.SaveChangesAsync();
         return new RegisterOutputDto
         {
-            UserName = registerDto.UserName,
-            NickName = registerDto.NickName,
-            Credential = registerDto.Credential
+            UserName = registerInput.UserName,
+            NickName = registerInput.NickName,
+            Credential = registerInput.Credential
         };
     }
 
     /// <summary>
     /// 用户登录
     /// </summary>
-    /// <param name="loginDto"></param>
+    /// <param name="loginInput"></param>
     /// <returns></returns>
     /// <exception cref="NotFoundException"></exception>
     /// <exception cref="InternalServerErrorException"></exception>
-    public async Task<LoginOutputDto> Login(LoginInputDto loginDto)
+    public async Task<LoginOutputDto> Login(LoginInputDto loginInput)
     {
         var userAuth = await _userAuthRepository.GetQueryable()
-            .FirstOrDefaultAsync(p => p.IdentityType == loginDto.IdentityType
-            && p.Identifier == loginDto.Identifier);
+            .FirstOrDefaultAsync(p => p.IdentityType == loginInput.IdentityType
+            && p.Identifier == loginInput.Identifier);
         if (userAuth == null)
         {
             throw new NotFoundException("用户不存在");
         }
-        var passwordHash = HashingHelper.HashUsingPbkdf2(loginDto.Credential, userAuth.Salt);
+        var passwordHash = HashingHelper.HashUsingPbkdf2(loginInput.Credential, userAuth.Salt);
         if (userAuth.Credential != passwordHash)
         {
             throw new InvalidParameterException("密码不正确");
@@ -112,6 +112,42 @@ public class AccountAppService : IAccountAppService
             NickName = userInfo.NickName,
             Avatar = userInfo.Avatar,
             JwtToken = jwtToken
+        };
+    }
+
+    /// <summary>
+    /// 修改密码
+    /// </summary>
+    /// <param name="changePasswordInput"></param>
+    /// <returns></returns>
+    /// <exception cref="NotFoundException"></exception>
+    /// <exception cref="InvalidParameterException"></exception>
+    public async Task<ChangePasswordOutputDto> ChangePassword(ChangePasswordInputDto changePasswordInput)
+    {
+        var userAuth = await _userAuthRepository.GetQueryable()
+            .FirstOrDefaultAsync(p => p.IdentityType == changePasswordInput.IdentityType
+            && p.Identifier == changePasswordInput.Identifier);
+        if (userAuth == null)
+        {
+            throw new NotFoundException("用户不存在");
+        }
+        var oldPasswordHash = HashingHelper.HashUsingPbkdf2(changePasswordInput.OldCredential, userAuth.Salt);
+        if (userAuth.Credential != oldPasswordHash)
+        {
+            throw new InvalidParameterException("原始密码不正确");
+        }
+        // 重新生成盐值
+        var rnd = new Random();
+        var n = rnd.Next(1, 128);
+        var newSalt = Base64Helper.Base64Encode(HashingHelper.GenerateSalt(n));
+        var newPasswordHash = HashingHelper.HashUsingPbkdf2(changePasswordInput.NewCredential, newSalt);
+        userAuth.Credential = newPasswordHash;
+        userAuth.Salt = newSalt;
+        await _unitOfWorkManager.Current!.SaveChangesAsync();
+        return new ChangePasswordOutputDto
+        {
+            Identifier = userAuth.Identifier,
+            NewCredential = changePasswordInput.NewCredential
         };
     }
 }
