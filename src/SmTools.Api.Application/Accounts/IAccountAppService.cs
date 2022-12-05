@@ -20,6 +20,8 @@ public interface IAccountAppService
     /// </summary>
     /// <param name="loginInput"></param>
     /// <returns></returns>
+    /// <exception cref="NotFoundException"></exception>
+    /// <exception cref="InternalServerErrorException"></exception>
     Task<LoginOutputDto> Login(LoginInputDto loginInput);
 
     /// <summary>

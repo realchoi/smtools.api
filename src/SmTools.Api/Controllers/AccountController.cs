@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using SmTools.Api.Application.Accounts;
 using SmTools.Api.Core.Helpers;
 using SmTools.Api.Model.Accounts.Dtos;
-using SpringMountain.Framework.Core.Exceptions;
-using SpringMountain.Framework.Exceptions;
 using SpringMountain.Framework.Snowflake;
 
 namespace SmTools.Api.Controllers;
