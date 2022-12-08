@@ -111,7 +111,7 @@ public class AccountAppService : IAccountAppService
         {
             NickName = userInfo.NickName,
             Avatar = userInfo.Avatar,
-            JwtToken = jwtToken
+            AccessToken = jwtToken
         };
     }
 

@@ -16,7 +16,7 @@ public class LoginOutputDto
     public string? Avatar { get; set; }
 
     /// <summary>
-    /// JWT Token
+    /// 请求接口的 JWT
     /// </summary>
-    public string JwtToken { get; set; }
+    public string AccessToken { get; set; }
 }
