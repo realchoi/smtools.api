@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmTools.Api.Core.Accounts;
 using SmTools.Api.Core.Helpers;
+using SmTools.Api.Model.Accounts;
 using SmTools.Api.Model.Accounts.Dtos;
 using SpringMountain.Framework.Core.Exceptions;
 using SpringMountain.Framework.Domain.Repositories;
@@ -48,15 +49,21 @@ public class AccountAppService : IAccountAppService
         {
             throw new InvalidParameterException("当前用户已存在，请换一个后再试");
         }
+
+        // 如果注册类型是用户名，则直接使用用户填入的用户名，否则随机生成一个
+        var userName = registerInput.IdentityType == IdentityTypeEnum.UserName
+            ? registerInput.Identifier
+            : $"user_{UserNameHelper.GenRandomUserName(10)}";
+
         var userInfo = new UserInfo
         {
             Id = _snowflakeIdMaker.NextId(),
-            UserName = registerInput.UserName,
+            UserName = userName,
             NickName = registerInput.NickName
         };
         await _userInfoRepository.AddAsync(userInfo);
         var rnd = new Random();
-        var n = rnd.Next(1, 128);
+        var n = rnd.Next(100, 128);
         var salt = Base64Helper.Base64Encode(HashingHelper.GenerateSalt(n));
         var passwordHash = HashingHelper.HashUsingPbkdf2(registerInput.Credential, salt);
         var userAuth = new UserAuth
@@ -71,7 +78,7 @@ public class AccountAppService : IAccountAppService
         await _unitOfWorkManager.Current!.SaveChangesAsync();
         return new RegisterOutputDto
         {
-            UserName = registerInput.UserName,
+            UserName = userName,
             NickName = registerInput.NickName,
             Credential = registerInput.Credential
         };
@@ -109,6 +116,7 @@ public class AccountAppService : IAccountAppService
         var jwtToken = _jwtHelper.CreateToken(userInfo);
         return new LoginOutputDto
         {
+            UserName = userInfo.UserName,
             NickName = userInfo.NickName,
             Avatar = userInfo.Avatar,
             AccessToken = jwtToken

@@ -6,6 +6,11 @@
 public class LoginOutputDto
 {
     /// <summary>
+    /// 用户名（唯一）
+    /// </summary>
+    public string UserName { get; set; }
+
+    /// <summary>
     /// 昵称
     /// </summary>
     public string NickName { get; set; }
