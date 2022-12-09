@@ -100,7 +100,7 @@ public class StartupModule : CoreModuleBase
                     ValidateIssuerSigningKey = true,    // 是否验证 SecurityKey
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"])),    // SecurityKey
                     ValidateLifetime = true,    // 是否验证失效时间
-                    ClockSkew = TimeSpan.FromSeconds(300),   // 过期时间容错值，解决服务器端时间不同步问题（秒）
+                    ClockSkew = TimeSpan.Zero,   // 过期时间容错值，解决服务器端时间不同步问题（秒）
                     RequireExpirationTime = true
                 };
             });
