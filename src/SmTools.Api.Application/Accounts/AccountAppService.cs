@@ -3,6 +3,7 @@ using SmTools.Api.Core.Accounts;
 using SmTools.Api.Core.Helpers;
 using SmTools.Api.Model.Accounts;
 using SmTools.Api.Model.Accounts.Dtos;
+using SmTools.Api.Model.Extensions;
 using SpringMountain.Framework.Core.Exceptions;
 using SpringMountain.Framework.Domain.Repositories;
 using SpringMountain.Framework.Exceptions;
@@ -47,7 +48,7 @@ public class AccountAppService : IAccountAppService
             .AnyAsync(p => p.IdentityType == registerInput.IdentityType && p.Identifier == registerInput.Identifier);
         if (exist)
         {
-            throw new InvalidParameterException("当前用户已存在，请换一个后再试");
+            throw new InvalidParameterException($"当前{registerInput.IdentityType.GetDescription()}已存在，请换一个后再试");
         }
 
         // 如果注册类型是用户名，则直接使用用户填入的用户名，否则随机生成一个
@@ -98,7 +99,7 @@ public class AccountAppService : IAccountAppService
             && p.Identifier == loginInput.Identifier);
         if (userAuth == null)
         {
-            throw new NotFoundException("用户不存在");
+            throw new NotFoundException($"{loginInput.IdentityType.GetDescription()}不存在");
         }
         var passwordHash = HashingHelper.HashUsingPbkdf2(loginInput.Credential, userAuth.Salt);
         if (userAuth.Credential != passwordHash)
@@ -137,7 +138,7 @@ public class AccountAppService : IAccountAppService
             && p.Identifier == changePasswordInput.Identifier);
         if (userAuth == null)
         {
-            throw new NotFoundException("用户不存在");
+            throw new NotFoundException($"{changePasswordInput.IdentityType.GetDescription()}不存在");
         }
         var oldPasswordHash = HashingHelper.HashUsingPbkdf2(changePasswordInput.OldCredential, userAuth.Salt);
         if (userAuth.Credential != oldPasswordHash)
