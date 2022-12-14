@@ -67,15 +67,31 @@ public class AccountAppService : IAccountAppService
         var n = rnd.Next(100, 128);
         var salt = Base64Helper.Base64Encode(HashingHelper.GenerateSalt(n));
         var passwordHash = HashingHelper.HashUsingPbkdf2(registerInput.Credential, salt);
-        var userAuth = new UserAuth
+        var userAuths = new List<UserAuth>
         {
-            UserId = userInfo.Id,
-            IdentityType = registerInput.IdentityType,
-            Identifier = registerInput.Identifier,
-            Credential = passwordHash,
-            Salt = salt
+            // 用户提交的注册类型
+            new UserAuth
+            {
+                UserId = userInfo.Id,
+                IdentityType = registerInput.IdentityType,
+                Identifier = registerInput.Identifier,
+                Credential = passwordHash,
+                Salt = salt
+            }
         };
-        await _userAuthRepository.AddAsync(userAuth);
+        // 如果用户提交的注册类型不是用户名注册，则同步新增一个用户名登录，使后续可以使用用户名登录
+        if (registerInput.IdentityType != IdentityTypeEnum.UserName)
+        {
+            userAuths.Add(new UserAuth
+            {
+                UserId = userInfo.Id,
+                IdentityType = IdentityTypeEnum.UserName,
+                Identifier = userName,
+                Credential = passwordHash,
+                Salt = salt
+            });
+        }
+        await _userAuthRepository.AddAsync(userAuths);
         await _unitOfWorkManager.Current!.SaveChangesAsync();
         return new RegisterOutputDto
         {
@@ -114,13 +130,13 @@ public class AccountAppService : IAccountAppService
             throw new InternalServerErrorException("未找到用户信息");
         }
         // 认证成功后，生成一个 jwt
-        var jwtToken = _jwtHelper.CreateToken(userInfo);
+        var accessToken = _jwtHelper.CreateToken(userInfo);
         return new LoginOutputDto
         {
             UserName = userInfo.UserName,
             NickName = userInfo.NickName,
             Avatar = userInfo.Avatar,
-            AccessToken = jwtToken
+            AccessToken = accessToken
         };
     }
 
@@ -152,6 +168,15 @@ public class AccountAppService : IAccountAppService
         var newPasswordHash = HashingHelper.HashUsingPbkdf2(changePasswordInput.NewCredential, newSalt);
         userAuth.Credential = newPasswordHash;
         userAuth.Salt = newSalt;
+
+        // 还需要同步修改同一个用户的其他登录方式的登录密码
+        var otherUserAuths = await _userAuthRepository.GetQueryable()
+            .Where(p => p.UserId == userAuth.UserId && p.IdentityType != changePasswordInput.IdentityType).ToListAsync();
+        otherUserAuths.ForEach(u =>
+        {
+            u.Credential = newPasswordHash;
+            u.Salt = newSalt;
+        });
         await _unitOfWorkManager.Current!.SaveChangesAsync();
         return new ChangePasswordOutputDto
         {
