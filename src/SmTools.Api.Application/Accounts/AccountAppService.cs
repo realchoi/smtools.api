@@ -163,7 +163,7 @@ public class AccountAppService : IAccountAppService
         }
         // 重新生成盐值
         var rnd = new Random();
-        var n = rnd.Next(1, 128);
+        var n = rnd.Next(100, 128);
         var newSalt = Base64Helper.Base64Encode(HashingHelper.GenerateSalt(n));
         var newPasswordHash = HashingHelper.HashUsingPbkdf2(changePasswordInput.NewCredential, newSalt);
         userAuth.Credential = newPasswordHash;
