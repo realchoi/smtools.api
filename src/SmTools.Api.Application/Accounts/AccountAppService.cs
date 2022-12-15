@@ -133,6 +133,8 @@ public class AccountAppService : IAccountAppService
         var accessToken = _jwtHelper.CreateToken(userInfo);
         return new LoginOutputDto
         {
+            IdentityType = loginInput.IdentityType,
+            Identifier = loginInput.Identifier,
             UserName = userInfo.UserName,
             NickName = userInfo.NickName,
             Avatar = userInfo.Avatar,
@@ -143,11 +145,12 @@ public class AccountAppService : IAccountAppService
     /// <summary>
     /// 修改密码
     /// </summary>
+    /// <param name="userId">当前登录用户的 Id</param>
     /// <param name="changePasswordInput"></param>
     /// <returns></returns>
     /// <exception cref="NotFoundException"></exception>
     /// <exception cref="InvalidParameterException"></exception>
-    public async Task<ChangePasswordOutputDto> ChangePassword(ChangePasswordInputDto changePasswordInput)
+    public async Task<ChangePasswordOutputDto> ChangePassword(int userId, ChangePasswordInputDto changePasswordInput)
     {
         var userAuth = await _userAuthRepository.GetQueryable()
             .FirstOrDefaultAsync(p => p.IdentityType == changePasswordInput.IdentityType
@@ -155,6 +158,10 @@ public class AccountAppService : IAccountAppService
         if (userAuth == null)
         {
             throw new NotFoundException($"{changePasswordInput.IdentityType.GetDescription()}不存在");
+        }
+        if (userAuth.UserId != userId)
+        {
+            throw new InvalidParameterException("没有权限修改他人的账户密码");
         }
         var oldPasswordHash = HashingHelper.HashUsingPbkdf2(changePasswordInput.OldCredential, userAuth.Salt);
         if (userAuth.Credential != oldPasswordHash)

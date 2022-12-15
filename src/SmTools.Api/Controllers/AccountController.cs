@@ -4,6 +4,7 @@ using SmTools.Api.Application.Accounts;
 using SmTools.Api.Core.Helpers;
 using SmTools.Api.Model.Accounts.Dtos;
 using SpringMountain.Framework.Snowflake;
+using System.Security.Claims;
 
 namespace SmTools.Api.Controllers;
 
@@ -77,10 +78,21 @@ public class AccountController : ControllerBase
     /// </summary>
     /// <param name="changePasswordInput"></param>
     /// <returns></returns>
+    [Authorize]
     [HttpPost("password/change")]
-    public async Task<JsonResult> ChangePassword(ChangePasswordInputDto changePasswordInput)
+    public async Task<IActionResult> ChangePassword(ChangePasswordInputDto changePasswordInput)
     {
-        var result = await _accountAppService.ChangePassword(changePasswordInput);
+        var claimsIdentity = HttpContext.User.Identity as ClaimsIdentity;
+        var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+        if (claim == null)
+        {
+            return Unauthorized("没有权限修改密码");
+        }
+        if (!int.TryParse(claim.Value, out var userId))
+        {
+            return Unauthorized("账号错误");
+        }
+        var result = await _accountAppService.ChangePassword(userId, changePasswordInput);
         return new JsonResult(result);
     }
 }

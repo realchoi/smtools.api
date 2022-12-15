@@ -27,9 +27,10 @@ public interface IAccountAppService
     /// <summary>
     /// 修改密码
     /// </summary>
+    /// <param name="userId"></param>
     /// <param name="changePasswordInput"></param>
     /// <returns></returns>
     /// <exception cref="NotFoundException"></exception>
     /// <exception cref="InvalidParameterException"></exception>
-    Task<ChangePasswordOutputDto> ChangePassword(ChangePasswordInputDto changePasswordInput);
+    Task<ChangePasswordOutputDto> ChangePassword(int userId, ChangePasswordInputDto changePasswordInput);
 }
