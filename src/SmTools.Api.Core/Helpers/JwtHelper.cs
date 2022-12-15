@@ -34,7 +34,7 @@ public class JwtHelper
             new Claim(ClaimTypes.Name, userInfo.NickName),    // HttpContext.User.Identity.Name
             //new Claim(ClaimTypes.Role, "admin"),    // HttpContext.User.IsInRole("admin")
             //new Claim(JwtRegisteredClaimNames.Jti, "admin"),
-            //new Claim("UserName", "Admin"),
+            new Claim("UserName", userInfo.UserName),
             new Claim("Name", userInfo.NickName)
         };
 
