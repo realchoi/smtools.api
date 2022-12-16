@@ -70,26 +70,22 @@ public class ErrorHandlingMiddleware
         {
             context.Response.StatusCode = (int)apiException.HttpCode;
 
-            return context.Response.WriteAsync(JsonConvert.SerializeObject(new ErrorOutput
-            {
-                Code = apiException.ErrorCode,
-                Status = apiException.Status,
-                Message = apiException.Message,
-                Details = apiException?.Details
-            }, serializerSetting));
+            return context.Response.WriteAsync(JsonConvert.SerializeObject(
+                new ErrorOutput(apiException.ErrorCode, apiException.Status, apiException.Message)
+                {
+                    Details = apiException?.Details
+                }, serializerSetting));
         }
         else
         {
             context.Response.StatusCode = 500;
-            return context.Response.WriteAsync(JsonConvert.SerializeObject(new ErrorOutput
-            {
-                Code = InternalErrorCode.InternalServerError,
-                Status = "INTERNAL_SERVER_ERROR",
-                Message = _env.IsDevelopment() ? exception.GetBaseException().Message : "Internal server error, please contact websites maintainer.",
-                Details = _env.IsDevelopment()
-                    ? new List<string> { exception.StackTrace }
-                    : null
-            }, serializerSetting));
+            var message = _env.IsDevelopment() ? exception.GetBaseException().Message : "服务器内部发生错误，请联系管理员";
+            var details = _env.IsDevelopment() ? new List<string> { exception.StackTrace } : null;
+            return context.Response.WriteAsync(JsonConvert.SerializeObject(
+                new ErrorOutput(InternalErrorCode.InternalServerError, "INTERNAL_SERVER_ERROR", message)
+                {
+                    Details = details
+                }, serializerSetting));
         }
     }
 }

@@ -42,22 +42,19 @@ public class ErrorHandlingFilterAttribute : ExceptionFilterAttribute
         if (context.Exception is ApiBaseException exception)
         {
             context.HttpContext.Response.StatusCode = (int)exception.HttpCode;
-            context.Result = new JsonResult(new ErrorOutput()
+            context.Result = new JsonResult(new ErrorOutput(exception.ErrorCode, exception.Status, exception.Message)
             {
-                Code = exception.ErrorCode,
-                Status = exception.Status,
-                Message = exception.Message,
                 Details = exception?.Details
             });
         }
         else
         {
             context.HttpContext.Response.StatusCode = 500;
-            context.Result = new JsonResult(new ErrorOutput()
+            context.Result = new JsonResult(new ErrorOutput(
+                InternalErrorCode.InternalServerError,
+                "INTERNAL_SERVER_ERROR",
+                context.Exception.GetBaseException().Message)
             {
-                Code = InternalErrorCode.InternalServerError,
-                Status = "INTERNAL_SERVER_ERROR",
-                Message = context.Exception.GetBaseException().Message,
                 Details = _webHostEnvironment.IsDevelopment()
                     ? new List<string>() { context.Exception.StackTrace }
                     : null

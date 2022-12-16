@@ -32,5 +32,5 @@ public interface IAccountAppService
     /// <returns></returns>
     /// <exception cref="NotFoundException"></exception>
     /// <exception cref="InvalidParameterException"></exception>
-    Task<ChangePasswordOutputDto> ChangePassword(int userId, ChangePasswordInputDto changePasswordInput);
+    Task<ChangePasswordOutputDto> ChangePassword(long userId, ChangePasswordInputDto changePasswordInput);
 }

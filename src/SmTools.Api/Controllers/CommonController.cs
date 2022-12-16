@@ -9,9 +9,9 @@ namespace SmTools.Api.Controllers;
 /// <summary>
 /// 公共接口
 /// </summary>
-[Route("api/[controller]")]
 [ApiController]
 [AllowAnonymous]
+[Route("common")]
 public class CommonController : ControllerBase
 {
     /// <summary>

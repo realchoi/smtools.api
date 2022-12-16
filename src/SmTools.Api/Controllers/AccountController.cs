@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SmTools.Api.Application.Accounts;
 using SmTools.Api.Core.Helpers;
 using SmTools.Api.Model.Accounts.Dtos;
+using SpringMountain.Framework.Core.Exceptions;
 using SpringMountain.Framework.Snowflake;
 using System.Security.Claims;
 
@@ -12,7 +13,7 @@ namespace SmTools.Api.Controllers;
 /// 账户
 /// </summary>
 [ApiController]
-[Route("[controller]")]
+[Route("account")]
 public class AccountController : ControllerBase
 {
     private readonly JwtHelper _jwtHelper;
@@ -86,11 +87,11 @@ public class AccountController : ControllerBase
         var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
         if (claim == null)
         {
-            return Unauthorized("没有权限修改密码");
+            throw new InvalidParameterException("账号错误");
         }
-        if (!int.TryParse(claim.Value, out var userId))
+        if (!long.TryParse(claim.Value, out var userId))
         {
-            return Unauthorized("账号错误");
+            throw new InvalidParameterException("账号错误");
         }
         var result = await _accountAppService.ChangePassword(userId, changePasswordInput);
         return new JsonResult(result);

@@ -25,11 +25,11 @@ public static class ModelBindingErrorHandlingExtension
                 logger.LogError(new EventId(0), error?.Errors.First().Exception, $"入参解析失败：{error?.Errors.First().ErrorMessage}");
                 logger.LogDebug($"入参解析失败：{error?.Errors.First().ErrorMessage}");
                 // 返回自定义异常信息
-                var errorOutput = new ErrorOutput
+                var errorOutput = new ErrorOutput(
+                    InternalErrorCode.InternalServerError,
+                    "服务器内部异常",
+                    $"入参解析失败：{error?.Errors.First().ErrorMessage}")
                 {
-                    Code = InternalErrorCode.InternalServerError,
-                    Status = "服务器内部异常",
-                    Message = $"入参解析失败：{error?.Errors.First().ErrorMessage}",
                     Details = error?.Errors.First().Exception?.ToString()
                 };
                 return new BadRequestObjectResult(errorOutput);

@@ -150,7 +150,7 @@ public class AccountAppService : IAccountAppService
     /// <returns></returns>
     /// <exception cref="NotFoundException"></exception>
     /// <exception cref="InvalidParameterException"></exception>
-    public async Task<ChangePasswordOutputDto> ChangePassword(int userId, ChangePasswordInputDto changePasswordInput)
+    public async Task<ChangePasswordOutputDto> ChangePassword(long userId, ChangePasswordInputDto changePasswordInput)
     {
         var userAuth = await _userAuthRepository.GetQueryable()
             .FirstOrDefaultAsync(p => p.IdentityType == changePasswordInput.IdentityType
@@ -166,7 +166,7 @@ public class AccountAppService : IAccountAppService
         var oldPasswordHash = HashingHelper.HashUsingPbkdf2(changePasswordInput.OldCredential, userAuth.Salt);
         if (userAuth.Credential != oldPasswordHash)
         {
-            throw new InvalidParameterException("原始密码不正确");
+            throw new InvalidParameterException("旧密码不正确");
         }
         // 重新生成盐值
         var rnd = new Random();
