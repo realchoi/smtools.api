@@ -191,4 +191,44 @@ public class AccountAppService : IAccountAppService
             NewCredential = changePasswordInput.NewCredential
         };
     }
+
+    /// <summary>
+    /// 修改用户名
+    /// </summary>
+    /// <param name="userId">当前登录用户的 Id</param>
+    /// <param name="changeUserNameInput"></param>
+    /// <returns></returns>
+    /// <exception cref="NotFoundException"></exception>
+    /// <exception cref="InvalidParameterException"></exception>
+    public async Task<ChangeUserNameOutputDto> ChangeUserName(long userId, ChangeUserNameInputDto changeUserNameInput)
+    {
+        var userInfo = await _userInfoRepository.GetQueryable()
+            .FirstOrDefaultAsync(p => p.UserName == changeUserNameInput.Identifier);
+        if (userInfo == null)
+        {
+            throw new NotFoundException($"用户名 {changeUserNameInput.Identifier} 不存在");
+        }
+        if (userInfo.Id != userId)
+        {
+            throw new InvalidParameterException("没有权限修改他人的用户名");
+        }
+        userInfo.UserName = changeUserNameInput.NewUserName;
+
+        var userAuth = await _userAuthRepository.GetQueryable()
+            .FirstOrDefaultAsync(p => p.IdentityType == IdentityTypeEnum.UserName
+            && p.Identifier == changeUserNameInput.Identifier);
+        if (userAuth != null)
+        {
+            if (userAuth.UserId != userId)
+            {
+                throw new InvalidParameterException("没有权限修改他人的用户名");
+            }
+            userAuth.Identifier = changeUserNameInput.Identifier;
+        }
+        await _unitOfWorkManager.Current!.SaveChangesAsync();
+        return new ChangeUserNameOutputDto
+        {
+            NewUserName = changeUserNameInput.NewUserName
+        };
+    }
 }

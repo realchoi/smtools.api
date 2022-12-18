@@ -33,4 +33,14 @@ public interface IAccountAppService
     /// <exception cref="NotFoundException"></exception>
     /// <exception cref="InvalidParameterException"></exception>
     Task<ChangePasswordOutputDto> ChangePassword(long userId, ChangePasswordInputDto changePasswordInput);
+
+    /// <summary>
+    /// 修改用户名
+    /// </summary>
+    /// <param name="userId">当前登录用户的 Id</param>
+    /// <param name="changeUserNameInput"></param>
+    /// <returns></returns>
+    /// <exception cref="NotFoundException"></exception>
+    /// <exception cref="InvalidParameterException"></exception>
+    Task<ChangeUserNameOutputDto> ChangeUserName(long userId, ChangeUserNameInputDto changeUserNameInput);
 }

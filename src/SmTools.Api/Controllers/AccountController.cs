@@ -4,6 +4,7 @@ using SmTools.Api.Application.Accounts;
 using SmTools.Api.Core.Helpers;
 using SmTools.Api.Model.Accounts.Dtos;
 using SpringMountain.Framework.Core.Exceptions;
+using SpringMountain.Framework.Exceptions;
 using SpringMountain.Framework.Snowflake;
 using System.Security.Claims;
 
@@ -94,6 +95,29 @@ public class AccountController : ControllerBase
             throw new InvalidParameterException("账号错误");
         }
         var result = await _accountAppService.ChangePassword(userId, changePasswordInput);
+        return new JsonResult(result);
+    }
+
+    /// <summary>
+    /// 修改用户名
+    /// </summary>
+    /// <param name="changeUserNameInput"></param>
+    /// <returns></returns>
+    [Authorize]
+    [HttpPost("username/change")]
+    public async Task<IActionResult> ChangeUserName(ChangeUserNameInputDto changeUserNameInput)
+    {
+        var claimsIdentity = HttpContext.User.Identity as ClaimsIdentity;
+        var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
+        if (claim == null)
+        {
+            throw new InvalidParameterException("账号错误");
+        }
+        if (!long.TryParse(claim.Value, out var userId))
+        {
+            throw new InvalidParameterException("账号错误");
+        }
+        var result = await _accountAppService.ChangeUserName(userId, changeUserNameInput);
         return new JsonResult(result);
     }
 }
