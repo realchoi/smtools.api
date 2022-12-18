@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmTools.Api.Application.Accounts;
+using SmTools.Api.Core.Accounts;
 using SmTools.Api.Core.Helpers;
 using SmTools.Api.Model.Accounts.Dtos;
 using SpringMountain.Framework.Core.Exceptions;
@@ -37,7 +38,12 @@ public class AccountController : ControllerBase
     [HttpGet("token")]
     public ActionResult<string> GetToken()
     {
-        return _jwtHelper.CreateToken(new Core.Accounts.UserInfo() { NickName = "test_user" });
+        return _jwtHelper.CreateToken(new UserInfo()
+        {
+            Id = 1000000000000000001,
+            UserName = "test_user",
+            NickName = "测试用户"
+        });
     }
 
     /// <summary>
