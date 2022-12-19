@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using SpringMountain.Framework.Exceptions;
-using SpringMountain.Framework.Exceptions.Enums;
-using SpringMountain.Framework.Exceptions.Models;
+using SpringMountain.Api.Exceptions.Contracts;
+using SpringMountain.Api.Exceptions.Contracts.Dtos;
+using SpringMountain.Api.Exceptions.Contracts.Exceptions;
 
 namespace SmTools.Api.Filters;
 

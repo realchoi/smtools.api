@@ -1,4 +1,4 @@
-﻿namespace SpringMountain.Framework.Exceptions.Enums;
+﻿namespace SpringMountain.Api.Exceptions.Contracts;
 
 /// <summary>
 /// 内部错误码枚举

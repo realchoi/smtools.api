@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SpringMountain.Api.Exceptions.Contracts.Exceptions.NotFound;
 using SpringMountain.Framework.Domain.Entities;
-using SpringMountain.Framework.Exceptions;
 using SpringMountain.Framework.Uow.EntityFrameworkCore;
 
 namespace SpringMountain.Framework.Domain.Repositories;

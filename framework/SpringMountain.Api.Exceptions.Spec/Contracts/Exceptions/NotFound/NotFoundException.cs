@@ -1,11 +1,10 @@
-﻿using SpringMountain.Framework.Exceptions.Enums;
-using System.Collections;
+﻿using System.Collections;
 using System.Net;
 
-namespace SpringMountain.Framework.Exceptions;
+namespace SpringMountain.Api.Exceptions.Contracts.Exceptions.NotFound;
 
 /// <summary>
-/// 未找到异常
+/// 未找到异常（404）
 /// </summary>
 public class NotFoundException : ApiBaseException
 {

@@ -1,11 +1,10 @@
-﻿using SpringMountain.Framework.Exceptions.Enums;
-using System.Collections;
+﻿using System.Collections;
 using System.Net;
 
-namespace SpringMountain.Framework.Exceptions;
+namespace SpringMountain.Api.Exceptions.Contracts.Exceptions.Server;
 
 /// <summary>
-/// 服务器内部错误异常
+/// 内部服务错误异常（500）
 /// </summary>
 public class InternalServerErrorException : ApiBaseException
 {

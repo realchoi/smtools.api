@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using SpringMountain.Framework.Exceptions;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Extensions.DependencyInjection;
+using SpringMountain.Api.Exceptions.Contracts.Exceptions;
 
 namespace SpringMountain.Framework.Uow.EntityFrameworkCore;
 

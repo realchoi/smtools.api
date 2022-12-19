@@ -1,12 +1,10 @@
-﻿using SpringMountain.Framework.Exceptions;
-using SpringMountain.Framework.Exceptions.Enums;
-using System.Collections;
+﻿using System.Collections;
 using System.Net;
 
-namespace SpringMountain.Framework.Core.Exceptions;
+namespace SpringMountain.Api.Exceptions.Contracts.Exceptions.Request;
 
 /// <summary>
-/// 无效参数异常
+/// 无效参数异常（400）
 /// </summary>
 public class InvalidParameterException : ApiBaseException
 {

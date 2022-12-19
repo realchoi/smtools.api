@@ -1,7 +1,6 @@
-﻿using SpringMountain.Framework.Exceptions.Enums;
-using System.Collections;
+﻿using System.Collections;
 
-namespace SpringMountain.Framework.Exceptions.Models;
+namespace SpringMountain.Api.Exceptions.Contracts.Dtos;
 
 /// <summary>
 /// 自定义错误信息
@@ -16,9 +15,9 @@ public class ErrorOutput
     /// <param name="message"></param>
     public ErrorOutput(InternalErrorCode code, string status, string message)
     {
-        this.Code = code;
-        this.Status = status;
-        this.Message = message;
+        Code = code;
+        Status = status;
+        Message = message;
     }
 
     /// <summary>

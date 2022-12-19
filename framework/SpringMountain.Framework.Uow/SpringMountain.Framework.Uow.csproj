@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\SpringMountain.Api.Exceptions.Spec\SpringMountain.Api.Exceptions.Spec.csproj" />
     <ProjectReference Include="..\SpringMountain.Framework.Core\SpringMountain.Framework.Core.csproj" />
     <ProjectReference Include="..\SpringMountain.Modularity\SpringMountain.Modularity.csproj" />
   </ItemGroup>

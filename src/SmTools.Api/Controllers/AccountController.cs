@@ -4,8 +4,7 @@ using SmTools.Api.Application.Accounts;
 using SmTools.Api.Core.Accounts;
 using SmTools.Api.Core.Helpers;
 using SmTools.Api.Model.Accounts.Dtos;
-using SpringMountain.Framework.Core.Exceptions;
-using SpringMountain.Framework.Exceptions;
+using SpringMountain.Api.Exceptions.Contracts.Exceptions.Auth;
 using SpringMountain.Framework.Snowflake;
 using System.Security.Claims;
 
@@ -94,11 +93,11 @@ public class AccountController : ControllerBase
         var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
         if (claim == null)
         {
-            throw new InvalidParameterException("账号错误");
+            throw new WrongUserPassException("账号错误");
         }
         if (!long.TryParse(claim.Value, out var userId))
         {
-            throw new InvalidParameterException("账号错误");
+            throw new WrongUserPassException("账号错误");
         }
         var result = await _accountAppService.ChangePassword(userId, changePasswordInput);
         return new JsonResult(result);
@@ -117,11 +116,11 @@ public class AccountController : ControllerBase
         var claim = claimsIdentity?.FindFirst(ClaimTypes.NameIdentifier);
         if (claim == null)
         {
-            throw new InvalidParameterException("账号错误");
+            throw new WrongUserPassException("账号错误");
         }
         if (!long.TryParse(claim.Value, out var userId))
         {
-            throw new InvalidParameterException("账号错误");
+            throw new WrongUserPassException("账号错误");
         }
         var result = await _accountAppService.ChangeUserName(userId, changeUserNameInput);
         return new JsonResult(result);

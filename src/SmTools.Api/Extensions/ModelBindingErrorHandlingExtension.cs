@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SpringMountain.Framework.Exceptions.Enums;
-using SpringMountain.Framework.Exceptions.Models;
+using SpringMountain.Api.Exceptions.Contracts;
+using SpringMountain.Api.Exceptions.Contracts.Dtos;
 
 namespace SmTools.Api.Extensions;
 

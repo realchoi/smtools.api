@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using SpringMountain.Framework.Exceptions;
-using SpringMountain.Framework.Exceptions.Enums;
-using SpringMountain.Framework.Exceptions.Models;
+using SpringMountain.Api.Exceptions.Contracts;
+using SpringMountain.Api.Exceptions.Contracts.Dtos;
+using SpringMountain.Api.Exceptions.Contracts.Exceptions;
 
 namespace SmTools.Api.Middlewares;
 

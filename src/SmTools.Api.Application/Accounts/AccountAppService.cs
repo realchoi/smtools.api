@@ -4,9 +4,10 @@ using SmTools.Api.Core.Helpers;
 using SmTools.Api.Model.Accounts;
 using SmTools.Api.Model.Accounts.Dtos;
 using SmTools.Api.Model.Extensions;
-using SpringMountain.Framework.Core.Exceptions;
+using SpringMountain.Api.Exceptions.Contracts.Exceptions.Auth;
+using SpringMountain.Api.Exceptions.Contracts.Exceptions.NotFound;
+using SpringMountain.Api.Exceptions.Contracts.Exceptions.Request;
 using SpringMountain.Framework.Domain.Repositories;
-using SpringMountain.Framework.Exceptions;
 using SpringMountain.Framework.Snowflake;
 using SpringMountain.Framework.Uow;
 
@@ -41,14 +42,14 @@ public class AccountAppService : IAccountAppService
     /// </summary>
     /// <param name="registerInput"></param>
     /// <returns></returns>
-    /// <exception cref="InvalidParameterException"></exception>
+    /// <exception cref="AlreadyExistedException"></exception>
     public async Task<RegisterOutputDto> Register(RegisterInputDto registerInput)
     {
         var exist = await _userAuthRepository.GetQueryable()
             .AnyAsync(p => p.IdentityType == registerInput.IdentityType && p.Identifier == registerInput.Identifier);
         if (exist)
         {
-            throw new InvalidParameterException($"当前{registerInput.IdentityType.GetDescription()}已存在，请换一个后再试");
+            throw new AlreadyExistedException($"当前{registerInput.IdentityType.GetDescription()}已存在，请换一个后再试");
         }
 
         // 如果注册类型是用户名，则直接使用用户填入的用户名，否则随机生成一个
@@ -107,7 +108,7 @@ public class AccountAppService : IAccountAppService
     /// <param name="loginInput"></param>
     /// <returns></returns>
     /// <exception cref="NotFoundException"></exception>
-    /// <exception cref="InternalServerErrorException"></exception>
+    /// <exception cref="WrongPasswordException"></exception>
     public async Task<LoginOutputDto> Login(LoginInputDto loginInput)
     {
         var userAuth = await _userAuthRepository.GetQueryable()
@@ -120,14 +121,13 @@ public class AccountAppService : IAccountAppService
         var passwordHash = HashingHelper.HashUsingPbkdf2(loginInput.Credential, userAuth.Salt);
         if (userAuth.Credential != passwordHash)
         {
-            throw new InvalidParameterException("密码不正确");
+            throw new WrongPasswordException("密码不正确");
         }
         var userInfo = await _userInfoRepository.GetQueryable()
             .FirstOrDefaultAsync(p => p.Id == userAuth.UserId);
         if (userInfo == null)
         {
-            // 如果用户能认证成功，但却找不到用户信息，说明程序本身出了问题，这里抛出服务器内部异常
-            throw new InternalServerErrorException("未找到用户信息");
+            throw new NotFoundException("未找到用户信息");
         }
         // 认证成功后，生成一个 jwt
         var accessToken = _jwtHelper.CreateToken(userInfo);
@@ -142,6 +142,7 @@ public class AccountAppService : IAccountAppService
         };
     }
 
+
     /// <summary>
     /// 修改密码
     /// </summary>
@@ -149,7 +150,8 @@ public class AccountAppService : IAccountAppService
     /// <param name="changePasswordInput"></param>
     /// <returns></returns>
     /// <exception cref="NotFoundException"></exception>
-    /// <exception cref="InvalidParameterException"></exception>
+    /// <exception cref="ForbiddenException"></exception>
+    /// <exception cref="UnauthenticatedException"></exception>
     public async Task<ChangePasswordOutputDto> ChangePassword(long userId, ChangePasswordInputDto changePasswordInput)
     {
         var userAuth = await _userAuthRepository.GetQueryable()
@@ -161,12 +163,12 @@ public class AccountAppService : IAccountAppService
         }
         if (userAuth.UserId != userId)
         {
-            throw new InvalidParameterException("没有权限修改他人的账户密码");
+            throw new ForbiddenException("没有权限修改他人的账户密码");
         }
         var oldPasswordHash = HashingHelper.HashUsingPbkdf2(changePasswordInput.OldCredential, userAuth.Salt);
         if (userAuth.Credential != oldPasswordHash)
         {
-            throw new InvalidParameterException("旧密码不正确");
+            throw new UnauthenticatedException("旧密码不正确");
         }
         // 重新生成盐值
         var rnd = new Random();
@@ -199,7 +201,7 @@ public class AccountAppService : IAccountAppService
     /// <param name="changeUserNameInput"></param>
     /// <returns></returns>
     /// <exception cref="NotFoundException"></exception>
-    /// <exception cref="InvalidParameterException"></exception>
+    /// <exception cref="ForbiddenException"></exception>
     public async Task<ChangeUserNameOutputDto> ChangeUserName(long userId, ChangeUserNameInputDto changeUserNameInput)
     {
         var userInfo = await _userInfoRepository.GetQueryable()
@@ -210,7 +212,7 @@ public class AccountAppService : IAccountAppService
         }
         if (userInfo.Id != userId)
         {
-            throw new InvalidParameterException("没有权限修改他人的用户名");
+            throw new ForbiddenException("没有权限修改他人的用户名");
         }
         userInfo.UserName = changeUserNameInput.NewUserName;
 
@@ -221,7 +223,7 @@ public class AccountAppService : IAccountAppService
         {
             if (userAuth.UserId != userId)
             {
-                throw new InvalidParameterException("没有权限修改他人的用户名");
+                throw new ForbiddenException("没有权限修改他人的用户名");
             }
             userAuth.Identifier = changeUserNameInput.Identifier;
         }

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\framework\SpringMountain.Api.Exceptions.Spec\SpringMountain.Api.Exceptions.Spec.csproj" />
     <ProjectReference Include="..\..\framework\SpringMountain.Modularity\SpringMountain.Modularity.csproj" />
     <ProjectReference Include="..\SmTools.Api.Persistence\SmTools.Api.Persistence.csproj" />
   </ItemGroup>

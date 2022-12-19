@@ -13,17 +13,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpringMountain.Framework.Co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpringMountain.Framework.EfCore", "framework\SpringMountain.Framework.EfCore\SpringMountain.Framework.EfCore.csproj", "{84398053-0B20-4F88-B09F-1077107D010E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringMountain.Framework.Uow", "framework\SpringMountain.Framework.Uow\SpringMountain.Framework.Uow.csproj", "{EC301092-AD2F-450E-A446-BEED40EB9A2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpringMountain.Framework.Uow", "framework\SpringMountain.Framework.Uow\SpringMountain.Framework.Uow.csproj", "{EC301092-AD2F-450E-A446-BEED40EB9A2C}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmTools.Api", "src\SmTools.Api\SmTools.Api.csproj", "{C2E77D75-D577-4632-A26A-3450E57E02B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmTools.Api.Application", "src\SmTools.Api.Application\SmTools.Api.Application.csproj", "{38A5611C-CA42-405B-B372-99D630353079}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmTools.Api.Application", "src\SmTools.Api.Application\SmTools.Api.Application.csproj", "{38A5611C-CA42-405B-B372-99D630353079}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmTools.Api.Core", "src\SmTools.Api.Core\SmTools.Api.Core.csproj", "{A7EB4C86-710C-451B-B9E0-BC07C370FB07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmTools.Api.Core", "src\SmTools.Api.Core\SmTools.Api.Core.csproj", "{A7EB4C86-710C-451B-B9E0-BC07C370FB07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmTools.Api.Persistence", "src\SmTools.Api.Persistence\SmTools.Api.Persistence.csproj", "{963C95E6-8E71-479A-9DA2-4B271AE7AA93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmTools.Api.Persistence", "src\SmTools.Api.Persistence\SmTools.Api.Persistence.csproj", "{963C95E6-8E71-479A-9DA2-4B271AE7AA93}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SmTools.Api.Model", "src\SmTools.Api.Model\SmTools.Api.Model.csproj", "{EABF469C-D6C8-4999-9A79-F1360B979C00}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringMountain.Api.Exceptions.Spec", "framework\SpringMountain.Api.Exceptions.Spec\SpringMountain.Api.Exceptions.Spec.csproj", "{ED9A2E06-F35A-404B-9AC8-D07024049D3D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,10 @@ Global
 		{EABF469C-D6C8-4999-9A79-F1360B979C00}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EABF469C-D6C8-4999-9A79-F1360B979C00}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EABF469C-D6C8-4999-9A79-F1360B979C00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED9A2E06-F35A-404B-9AC8-D07024049D3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED9A2E06-F35A-404B-9AC8-D07024049D3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED9A2E06-F35A-404B-9AC8-D07024049D3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED9A2E06-F35A-404B-9AC8-D07024049D3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -81,6 +87,7 @@ Global
 		{A7EB4C86-710C-451B-B9E0-BC07C370FB07} = {568F584C-6D5C-40BF-B074-FDFE7F2783F0}
 		{963C95E6-8E71-479A-9DA2-4B271AE7AA93} = {568F584C-6D5C-40BF-B074-FDFE7F2783F0}
 		{EABF469C-D6C8-4999-9A79-F1360B979C00} = {568F584C-6D5C-40BF-B074-FDFE7F2783F0}
+		{ED9A2E06-F35A-404B-9AC8-D07024049D3D} = {A01781B7-4DC4-420C-B30E-1C7EB5EE408F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AB814AAF-6109-498D-8C2C-D6689277F44C}

@@ -12,7 +12,6 @@ public interface IAccountAppService
     /// </summary>
     /// <param name="registerInput"></param>
     /// <returns></returns>
-    /// <exception cref="InvalidParameterException"></exception>
     Task<RegisterOutputDto> Register(RegisterInputDto registerInput);
 
     /// <summary>
@@ -20,8 +19,6 @@ public interface IAccountAppService
     /// </summary>
     /// <param name="loginInput"></param>
     /// <returns></returns>
-    /// <exception cref="NotFoundException"></exception>
-    /// <exception cref="InternalServerErrorException"></exception>
     Task<LoginOutputDto> Login(LoginInputDto loginInput);
 
     /// <summary>
@@ -30,8 +27,6 @@ public interface IAccountAppService
     /// <param name="userId"></param>
     /// <param name="changePasswordInput"></param>
     /// <returns></returns>
-    /// <exception cref="NotFoundException"></exception>
-    /// <exception cref="InvalidParameterException"></exception>
     Task<ChangePasswordOutputDto> ChangePassword(long userId, ChangePasswordInputDto changePasswordInput);
 
     /// <summary>
@@ -40,7 +35,5 @@ public interface IAccountAppService
     /// <param name="userId">当前登录用户的 Id</param>
     /// <param name="changeUserNameInput"></param>
     /// <returns></returns>
-    /// <exception cref="NotFoundException"></exception>
-    /// <exception cref="InvalidParameterException"></exception>
     Task<ChangeUserNameOutputDto> ChangeUserName(long userId, ChangeUserNameInputDto changeUserNameInput);
 }

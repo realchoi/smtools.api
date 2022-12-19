@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SmTools.Api.Filters;
 using SmTools.Api.Model;
-using SpringMountain.Framework.Exceptions;
+using SpringMountain.Api.Exceptions.Contracts.Exceptions.NotFound;
 
 namespace SmTools.Api.Controllers;
 

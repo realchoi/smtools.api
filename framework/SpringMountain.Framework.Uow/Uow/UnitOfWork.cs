@@ -1,4 +1,4 @@
-﻿using SpringMountain.Framework.Exceptions;
+﻿using SpringMountain.Api.Exceptions.Contracts.Exceptions;
 using System.Collections.Immutable;
 
 namespace SpringMountain.Framework.Uow;
