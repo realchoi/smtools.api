@@ -150,6 +150,20 @@ public class StartupModule : CoreModuleBase
         var app = context.ApplicationBuilder;
         var env = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
 
+        app.Use(next => context =>
+        {
+            /**
+             * 说明：在记录审计日志时，需要在 Action 执行完成后再次读取 context.Request.Body（详见 AuditActionAttribute 自定义特性过滤器）。
+             * 一般情况下，context.Request.Body 流对象不允许被重复读取，
+             * 这是因为 context.Request.Body 流对象的 Position 和 Seek 都是不允许进行修改操作的，一旦操作会直接抛出异常。
+             * 若希望重复读取 context.Request.Body 流对象，微软引入了 context.Request 的扩展方法 EnableBuffering()，
+             * 调用这个方法后，我们可以通过重置流对象的读取位置，来实现 context.Request.Body 的重复读取。
+             * 注意：EnableBuffering() 方法每次请求设置一次即可，即在准备读取 context.Request.Body 之前设置。
+             */
+            context.Request.EnableBuffering();
+            return next(context);
+        });
+
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
