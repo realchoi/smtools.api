@@ -190,15 +190,3 @@ internal class RepeatSubmitDto
     /// </summary>
     public long Timestamp { get; set; }
 }
-
-public static class PreventRepeatSubmitMiddlewareExtensions
-{
-    /// <summary>
-    /// 防止重复请求
-    /// </summary>
-    /// <param name="builder"></param>
-    public static void UsePreventRepeatSubmitMiddleware(this IApplicationBuilder builder)
-    {
-        builder.UseMiddleware<PreventRepeatSubmitMiddleware>();
-    }
-}

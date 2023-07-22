@@ -16,4 +16,13 @@ public static class MiddlewareExtension
     {
         return app.UseMiddleware<ErrorHandlingMiddleware>();
     }
+
+    /// <summary>
+    /// 防止重复请求
+    /// </summary>
+    /// <param name="app"></param>
+    public static void UsePreventRepeatSubmitMiddleware(this IApplicationBuilder app)
+    {
+        app.UseMiddleware<PreventRepeatSubmitMiddleware>();
+    }
 }
