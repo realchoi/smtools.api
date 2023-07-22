@@ -13,6 +13,7 @@ using SpringMountain.Modularity;
 using SpringMountain.Modularity.Attribute;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using SmTools.Api.Middlewares;
 
 namespace SmTools.Api;
 
@@ -39,13 +40,14 @@ public class StartupModule : CoreModuleBase
         var configuration = context.Configuration;
 
         #region Route
+
         services.AddCors(options =>
         {
             options.AddPolicy("default", policy =>
             {
                 policy.AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod();
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
             });
         });
 
@@ -55,9 +57,11 @@ public class StartupModule : CoreModuleBase
             // 路由统一添加前缀
             options.Conventions.Insert(0, new RouteConvention(new RouteAttribute("api")));
         });
+
         #endregion
 
         #region Swagger
+
         services.AddSwaggerGen(options =>
         {
             options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
@@ -82,25 +86,25 @@ public class StartupModule : CoreModuleBase
                 Type = SecuritySchemeType.ApiKey
             });
         });
+
         #endregion
 
         #region JWT Token
-        services.AddAuthentication(options =>
-        {
-            options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
+
+        services.AddAuthentication(options => { options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme; })
             .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,  // 是否验证 Issuer
-                    ValidIssuer = configuration["Jwt:Issuer"],  // 发行人 Issuer
-                    ValidateAudience = true,    // 是否验证 Audience
-                    ValidAudience = configuration["Jwt:Audience"],  // 订阅人 Audience
-                    ValidateIssuerSigningKey = true,    // 是否验证 SecurityKey
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"])),    // SecurityKey
-                    ValidateLifetime = true,    // 是否验证失效时间
-                    ClockSkew = TimeSpan.Zero,   // 过期时间容错值，解决服务器端时间不同步问题（秒）
+                    ValidateIssuer = true, // 是否验证 Issuer
+                    ValidIssuer = configuration["Jwt:Issuer"], // 发行人 Issuer
+                    ValidateAudience = true, // 是否验证 Audience
+                    ValidAudience = configuration["Jwt:Audience"], // 订阅人 Audience
+                    ValidateIssuerSigningKey = true, // 是否验证 SecurityKey
+                    IssuerSigningKey =
+                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SecretKey"])), // SecurityKey
+                    ValidateLifetime = true, // 是否验证失效时间
+                    ClockSkew = TimeSpan.Zero, // 过期时间容错值，解决服务器端时间不同步问题（秒）
                     RequireExpirationTime = true
                 };
             });
@@ -108,26 +112,32 @@ public class StartupModule : CoreModuleBase
         // 注入 JwtHelper，单例模式
         services.AddSingleton(new JwtHelper(configuration));
         services.AddSingleton(new HashingHelper());
+
         #endregion
 
         #region 雪花算法
-        services.AddSnowflake(option =>
-        {
-            option.WorkId = 1;
-        });
+
+        services.AddSnowflake(option => { option.WorkId = 1; });
+
         #endregion
 
         #region HttpContextAccessor
+
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
         #endregion
 
         #region MediatR 中介者
+
         services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies()
             .Where(c => c.FullName != null && c.FullName.StartsWith("SmTools.Api")).ToArray());
+
         #endregion
 
         #region 模型绑定异常处理配置
+
         services.ConfigureModelBindingErrorHandling();
+
         #endregion
     }
 
@@ -146,10 +156,7 @@ public class StartupModule : CoreModuleBase
 
             // 使用 swagger
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "SmTools.Api v1");
-            });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "SmTools.Api v1"); });
         }
         else
         {
@@ -166,12 +173,12 @@ public class StartupModule : CoreModuleBase
         // 再授权
         app.UseAuthorization();
 
+        // 防止重复请求
+        app.UsePreventRepeatSubmitMiddleware();
+
         // 自定义异常处理中间件
         app.UseErrorHandlingMiddleware();
 
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-        });
+        app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
     }
 }

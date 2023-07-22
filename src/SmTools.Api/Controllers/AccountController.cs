@@ -7,6 +7,7 @@ using SmTools.Api.Model.Accounts.Dtos;
 using SpringMountain.Api.Exceptions.Contracts.Exceptions.Auth;
 using SpringMountain.Framework.Snowflake;
 using System.Security.Claims;
+using SmTools.Api.Filters;
 
 namespace SmTools.Api.Controllers;
 
@@ -62,6 +63,7 @@ public class AccountController : ControllerBase
     /// <param name="registerInput"></param>
     /// <returns></returns>
     [HttpPost("register")]
+    [PreventRepeatSubmit]
     public async Task<JsonResult> Register(RegisterInputDto registerInput)
     {
         var result = await _accountAppService.Register(registerInput);
@@ -87,6 +89,7 @@ public class AccountController : ControllerBase
     /// <returns></returns>
     [Authorize]
     [HttpPost("password/change")]
+    [PreventRepeatSubmit]
     public async Task<IActionResult> ChangePassword(ChangePasswordInputDto changePasswordInput)
     {
         var claimsIdentity = HttpContext.User.Identity as ClaimsIdentity;
@@ -95,10 +98,12 @@ public class AccountController : ControllerBase
         {
             throw new WrongUserPassException("账号错误");
         }
+
         if (!long.TryParse(claim.Value, out var userId))
         {
             throw new WrongUserPassException("账号错误");
         }
+
         var result = await _accountAppService.ChangePassword(userId, changePasswordInput);
         return new JsonResult(result);
     }
@@ -110,6 +115,7 @@ public class AccountController : ControllerBase
     /// <returns></returns>
     [Authorize]
     [HttpPost("username/change")]
+    [PreventRepeatSubmit]
     public async Task<IActionResult> ChangeUserName(ChangeUserNameInputDto changeUserNameInput)
     {
         var claimsIdentity = HttpContext.User.Identity as ClaimsIdentity;
@@ -118,10 +124,12 @@ public class AccountController : ControllerBase
         {
             throw new WrongUserPassException("账号错误");
         }
+
         if (!long.TryParse(claim.Value, out var userId))
         {
             throw new WrongUserPassException("账号错误");
         }
+
         var result = await _accountAppService.ChangeUserName(userId, changeUserNameInput);
         return new JsonResult(result);
     }
