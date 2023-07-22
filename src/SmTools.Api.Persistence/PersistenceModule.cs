@@ -6,6 +6,7 @@ using SmTools.Api.Core;
 using SpringMountain.Modularity;
 using SpringMountain.Modularity.Attribute;
 using System.Diagnostics;
+using Microsoft.Extensions.Logging.Debug;
 
 namespace SmTools.Api.Persistence;
 
@@ -15,7 +16,12 @@ namespace SmTools.Api.Persistence;
 [DependsOn(typeof(CoreModule))]
 public class PersistenceModule : CoreModuleBase
 {
-    public IConfiguration Configuration { get; set; }
+    private IConfiguration Configuration { get; set; }
+
+    /// <summary>
+    /// 调试日志工厂
+    /// </summary>
+    private static readonly LoggerFactory MyLoggerFactory = new LoggerFactory(new[] { new DebugLoggerProvider() });
 
     public PersistenceModule(IConfiguration configuration)
     {
@@ -34,6 +40,10 @@ public class PersistenceModule : CoreModuleBase
         {
             options.UseNpgsql(Configuration["Db:SmTools:ConnectionString"]);
 #if DEBUG
+            // 查看数据库操作的日志
+            options.UseLoggerFactory(MyLoggerFactory);
+            // 启用敏感数据记录
+            options.EnableSensitiveDataLogging(true);
             options.LogTo(s => Debug.WriteLine(s), minimumLevel: LogLevel.Information);
 #endif
         });
@@ -80,6 +90,7 @@ public class PersistenceModule : CoreModuleBase
                 services.AddScoped(baseType, type);
             }
         }
+
         return services;
     }
 }
