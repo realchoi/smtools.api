@@ -1,4 +1,7 @@
-﻿namespace SmTools.Api.Model.Accounts.Dtos;
+﻿using SmTools.Api.Model.Extensions;
+using SpringMountain.Api.Exceptions.Contracts.Exceptions.Request;
+
+namespace SmTools.Api.Model.Accounts.Dtos;
 
 /// <summary>
 /// 修改密码入参
@@ -24,4 +27,27 @@ public class ChangePasswordInputDto
     /// 新密码凭证（站内的保存密码，站外的不保存或保存 token）
     /// </summary>
     public string NewCredential { get; set; }
+
+    /// <summary>
+    /// 必填项验证
+    /// </summary>
+    /// <exception cref="InvalidParameterException"></exception>
+    public void Validate()
+    {
+        var identityTypeName = IdentityType.GetDescription();
+        if (Identifier.IsNullOrEmpty())
+        {
+            throw new InvalidParameterException($"{identityTypeName}不能为空");
+        }
+
+        if (OldCredential.IsNullOrEmpty())
+        {
+            throw new InvalidParameterException("旧密码不能为空");
+        }
+
+        if (NewCredential.IsNullOrEmpty())
+        {
+            throw new InvalidParameterException("新密码不能为空");
+        }
+    }
 }

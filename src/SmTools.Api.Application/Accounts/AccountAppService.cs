@@ -45,6 +45,8 @@ public class AccountAppService : IAccountAppService
     /// <exception cref="AlreadyExistedException"></exception>
     public async Task<RegisterOutputDto> Register(RegisterInputDto registerInput)
     {
+        registerInput.Validate();
+
         var exist = await _userAuthRepository.GetQueryable()
             .AnyAsync(p => p.IdentityType == registerInput.IdentityType && p.Identifier == registerInput.Identifier);
         if (exist)
@@ -92,6 +94,7 @@ public class AccountAppService : IAccountAppService
                 Salt = salt
             });
         }
+
         await _userAuthRepository.AddAsync(userAuths);
         await _unitOfWorkManager.Current!.SaveChangesAsync();
         return new RegisterOutputDto
@@ -111,24 +114,29 @@ public class AccountAppService : IAccountAppService
     /// <exception cref="WrongPasswordException"></exception>
     public async Task<LoginOutputDto> Login(LoginInputDto loginInput)
     {
+        loginInput.Validate();
+
         var userAuth = await _userAuthRepository.GetQueryable()
             .FirstOrDefaultAsync(p => p.IdentityType == loginInput.IdentityType
-            && p.Identifier == loginInput.Identifier);
+                                      && p.Identifier == loginInput.Identifier);
         if (userAuth == null)
         {
             throw new NotFoundException($"{loginInput.IdentityType.GetDescription()}不存在");
         }
+
         var passwordHash = HashingHelper.HashUsingPbkdf2(loginInput.Credential, userAuth.Salt);
         if (userAuth.Credential != passwordHash)
         {
             throw new WrongPasswordException("密码不正确");
         }
+
         var userInfo = await _userInfoRepository.GetQueryable()
             .FirstOrDefaultAsync(p => p.Id == userAuth.UserId);
         if (userInfo == null)
         {
             throw new NotFoundException("未找到用户信息");
         }
+
         // 认证成功后，生成一个 jwt
         var accessToken = _jwtHelper.CreateToken(userInfo);
         return new LoginOutputDto
@@ -154,22 +162,27 @@ public class AccountAppService : IAccountAppService
     /// <exception cref="UnauthenticatedException"></exception>
     public async Task<ChangePasswordOutputDto> ChangePassword(long userId, ChangePasswordInputDto changePasswordInput)
     {
+        changePasswordInput.Validate();
+
         var userAuth = await _userAuthRepository.GetQueryable()
             .FirstOrDefaultAsync(p => p.IdentityType == changePasswordInput.IdentityType
-            && p.Identifier == changePasswordInput.Identifier);
+                                      && p.Identifier == changePasswordInput.Identifier);
         if (userAuth == null)
         {
             throw new NotFoundException($"{changePasswordInput.IdentityType.GetDescription()}不存在");
         }
+
         if (userAuth.UserId != userId)
         {
             throw new ForbiddenException("没有权限修改他人的账户密码");
         }
+
         var oldPasswordHash = HashingHelper.HashUsingPbkdf2(changePasswordInput.OldCredential, userAuth.Salt);
         if (userAuth.Credential != oldPasswordHash)
         {
             throw new UnauthenticatedException("旧密码不正确");
         }
+
         // 重新生成盐值
         var rnd = new Random();
         var n = rnd.Next(100, 128);
@@ -180,7 +193,8 @@ public class AccountAppService : IAccountAppService
 
         // 还需要同步修改同一个用户的其他登录方式的登录密码
         var otherUserAuths = await _userAuthRepository.GetQueryable()
-            .Where(p => p.UserId == userAuth.UserId && p.IdentityType != changePasswordInput.IdentityType).ToListAsync();
+            .Where(p => p.UserId == userAuth.UserId && p.IdentityType != changePasswordInput.IdentityType)
+            .ToListAsync();
         otherUserAuths.ForEach(u =>
         {
             u.Credential = newPasswordHash;
@@ -204,29 +218,35 @@ public class AccountAppService : IAccountAppService
     /// <exception cref="ForbiddenException"></exception>
     public async Task<ChangeUserNameOutputDto> ChangeUserName(long userId, ChangeUserNameInputDto changeUserNameInput)
     {
+        changeUserNameInput.Validate();
+
         var userInfo = await _userInfoRepository.GetQueryable()
             .FirstOrDefaultAsync(p => p.UserName == changeUserNameInput.Identifier);
         if (userInfo == null)
         {
             throw new NotFoundException($"用户名 {changeUserNameInput.Identifier} 不存在");
         }
+
         if (userInfo.Id != userId)
         {
             throw new ForbiddenException("没有权限修改他人的用户名");
         }
+
         userInfo.UserName = changeUserNameInput.NewUserName;
 
         var userAuth = await _userAuthRepository.GetQueryable()
             .FirstOrDefaultAsync(p => p.IdentityType == IdentityTypeEnum.UserName
-            && p.Identifier == changeUserNameInput.Identifier);
+                                      && p.Identifier == changeUserNameInput.Identifier);
         if (userAuth != null)
         {
             if (userAuth.UserId != userId)
             {
                 throw new ForbiddenException("没有权限修改他人的用户名");
             }
+
             userAuth.Identifier = changeUserNameInput.Identifier;
         }
+
         await _unitOfWorkManager.Current!.SaveChangesAsync();
         return new ChangeUserNameOutputDto
         {

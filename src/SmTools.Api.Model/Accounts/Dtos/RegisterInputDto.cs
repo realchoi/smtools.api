@@ -1,4 +1,7 @@
-﻿namespace SmTools.Api.Model.Accounts.Dtos;
+﻿using SmTools.Api.Model.Extensions;
+using SpringMountain.Api.Exceptions.Contracts.Exceptions.Request;
+
+namespace SmTools.Api.Model.Accounts.Dtos;
 
 /// <summary>
 /// 用户注册入参
@@ -24,4 +27,22 @@ public class RegisterInputDto
     /// 昵称
     /// </summary>
     public string NickName { get; set; }
+
+    /// <summary>
+    /// 必填项验证
+    /// </summary>
+    /// <exception cref="InvalidParameterException"></exception>
+    public void Validate()
+    {
+        var identityTypeName = IdentityType.GetDescription();
+        if (Identifier.IsNullOrEmpty())
+        {
+            throw new InvalidParameterException($"{identityTypeName}不能为空");
+        }
+
+        if (Credential.IsNullOrEmpty())
+        {
+            throw new InvalidParameterException("密码不能为空");
+        }
+    }
 }
