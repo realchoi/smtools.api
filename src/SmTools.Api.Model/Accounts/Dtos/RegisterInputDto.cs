@@ -34,6 +34,11 @@ public class RegisterInputDto
     /// <exception cref="InvalidParameterException"></exception>
     public void Validate()
     {
+        if (NickName.IsNullOrEmpty())
+        {
+            throw new InvalidParameterException("昵称不能为空");
+        }
+
         var identityTypeName = IdentityType.GetDescription();
         if (Identifier.IsNullOrEmpty())
         {
