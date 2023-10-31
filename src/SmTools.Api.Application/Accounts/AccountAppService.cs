@@ -141,6 +141,7 @@ public class AccountAppService : IAccountAppService
         var accessToken = _jwtHelper.CreateToken(userInfo);
         return new LoginOutputDto
         {
+            Id = userInfo.Id.ToString(),
             IdentityType = loginInput.IdentityType,
             Identifier = loginInput.Identifier,
             UserName = userInfo.UserName,

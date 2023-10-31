@@ -6,6 +6,7 @@ using SmTools.Api.Persistence.Tools;
 using SpringMountain.Framework.Domain.Repositories;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
+using SmTools.Api.Core.CbBookmarks;
 
 namespace SmTools.Api.Persistence;
 
@@ -23,6 +24,16 @@ public class SmToolDbContext : CoreDbContext
     /// 用户资料信息
     /// </summary>
     public DbSet<UserInfo> UserInfos { get; set; }
+
+    /// <summary>
+    /// 书签文件夹
+    /// </summary>
+    public DbSet<Folder> Folders { get; set; }
+
+    /// <summary>
+    /// 书签
+    /// </summary>
+    public DbSet<Bookmark> Bookmarks { get; set; }
 
     public SmToolDbContext(DbContextOptions options) : base(options)
     {
@@ -47,7 +58,8 @@ public class SmToolDbContext : CoreDbContext
                 entity.ToTable(NpgsqlSnakeCaseNameTranslator.ConvertToSnakeCase(type.ClrType.Name));
             }
 
-            var properties = type.ClrType.GetProperties().Where(c => c.GetCustomAttribute<NotMappedAttribute>() == null);
+            var properties = type.ClrType.GetProperties()
+                .Where(c => c.GetCustomAttribute<NotMappedAttribute>() == null);
             foreach (var property in properties)
             {
                 var prop = entity.Property(property.Name);
@@ -58,10 +70,12 @@ public class SmToolDbContext : CoreDbContext
                     // 如果没有自定义映射字段，则默认使用属性名（转换为 snake_case）映射
                     prop.HasColumnName(NpgsqlSnakeCaseNameTranslator.ConvertToSnakeCase(property.Name));
                 }
+
                 if (property.PropertyType == typeof(DateTime) || property.PropertyType == typeof(DateTime?))
                 {
                     prop.HasColumnType("timestamp").HasConversion(timeConverter);
                 }
+
                 if (columnAttribute?.TypeName == "jsonb")
                 {
                     prop.HasConversion(EfValueTool.GetJsonValueConverterByType(property.PropertyType));
@@ -69,6 +83,7 @@ public class SmToolDbContext : CoreDbContext
                 }
             }
         }
+
         base.OnModelCreating(modelBuilder);
     }
 }

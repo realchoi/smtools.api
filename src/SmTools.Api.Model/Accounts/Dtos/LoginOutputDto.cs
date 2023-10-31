@@ -6,6 +6,11 @@
 public class LoginOutputDto
 {
     /// <summary>
+    /// 用户 Id，关联 user_info 表的主键
+    /// </summary>
+    public string Id { get; set; }
+
+    /// <summary>
     /// 登录类型
     /// </summary>
     public IdentityTypeEnum IdentityType { get; set; }
