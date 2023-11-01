@@ -6,7 +6,8 @@ using SmTools.Api.Persistence.Tools;
 using SpringMountain.Framework.Domain.Repositories;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
-using SmTools.Api.Core.CbBookmarks;
+using SmTools.Api.Core.BookmarkCategories;
+using SmTools.Api.Core.BookmarkItems;
 
 namespace SmTools.Api.Persistence;
 
@@ -26,14 +27,14 @@ public class SmToolDbContext : CoreDbContext
     public DbSet<UserInfo> UserInfos { get; set; }
 
     /// <summary>
-    /// 书签文件夹
+    /// 书签分类目录
     /// </summary>
-    public DbSet<Folder> Folders { get; set; }
+    public DbSet<BookmarkCategory> BookmarkCategories { get; set; }
 
     /// <summary>
-    /// 书签
+    /// 书签条目
     /// </summary>
-    public DbSet<Bookmark> Bookmarks { get; set; }
+    public DbSet<BookmarkItem> BookmarkItems { get; set; }
 
     public SmToolDbContext(DbContextOptions options) : base(options)
     {

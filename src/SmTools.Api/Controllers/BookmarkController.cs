@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SmTools.Api.Application.CbBookmarks;
-using SmTools.Api.Model.CbBookmarks.Dtos;
+using SmTools.Api.Application.BookmarkCategories;
+using SmTools.Api.Model.BookmarkCategories.Dtos;
 
 namespace SmTools.Api.Controllers;
 
@@ -11,11 +11,11 @@ namespace SmTools.Api.Controllers;
 [Route("bookmark")]
 public class BookmarkController : ControllerBase
 {
-    private readonly IFolderAppService _folderAppService;
+    private readonly IBookmarkCategoryAppService _bookmarkCategoryAppService;
 
-    public BookmarkController(IFolderAppService folderAppService)
+    public BookmarkController(IBookmarkCategoryAppService bookmarkCategoryAppService)
     {
-        _folderAppService = folderAppService;
+        _bookmarkCategoryAppService = bookmarkCategoryAppService;
     }
 
     /// <summary>
@@ -23,9 +23,9 @@ public class BookmarkController : ControllerBase
     /// </summary>
     /// <param name="userId">用户 id</param>
     /// <returns></returns>
-    [HttpGet("tree")]
-    public async Task<List<FolderTreeDto>> GetFolderTree(string userId)
+    [HttpGet("category/tree")]
+    public async Task<List<BookmarkCategoryTreeDto>> GetBookmarkCategoryTree(string userId)
     {
-        return await _folderAppService.GetFolderTree(userId);
+        return await _bookmarkCategoryAppService.GetBookmarkCategoryTree(userId);
     }
 }

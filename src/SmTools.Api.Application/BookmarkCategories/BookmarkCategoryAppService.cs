@@ -1,30 +1,30 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SmTools.Api.Core.CbBookmarks;
-using SmTools.Api.Model.CbBookmarks.Dtos;
+using SmTools.Api.Core.BookmarkCategories;
+using SmTools.Api.Model.BookmarkCategories.Dtos;
 using SpringMountain.Api.Exceptions.Contracts.Exceptions.Request;
 using SpringMountain.Framework.Domain.Repositories;
 
-namespace SmTools.Api.Application.CbBookmarks;
+namespace SmTools.Api.Application.BookmarkCategories;
 
 /// <summary>
-/// 书签文件夹服务实现类
+/// 书签分类目录服务实现类
 /// </summary>
-public class FolderAppService : IFolderAppService
+public class BookmarkCategoryAppService : IBookmarkCategoryAppService
 {
-    private readonly IRepository<Folder, long> _folderRepository;
+    private readonly IRepository<BookmarkCategory, long> _folderRepository;
 
-    public FolderAppService(IRepository<Folder, long> folderRepository)
+    public BookmarkCategoryAppService(IRepository<BookmarkCategory, long> folderRepository)
     {
         _folderRepository = folderRepository;
     }
 
     /// <summary>
-    /// 获取用户的书签文件夹树
+    /// 获取用户的书签分类目录树
     /// </summary>
     /// <param name="userId">用户 id</param>
     /// <returns></returns>
     /// <exception cref="InvalidParameterException"></exception>
-    public async Task<List<FolderTreeDto>> GetFolderTree(string userId)
+    public async Task<List<BookmarkCategoryTreeDto>> GetBookmarkCategoryTree(string userId)
     {
         if (userId.IsNullOrEmpty())
         {
@@ -42,16 +42,17 @@ public class FolderAppService : IFolderAppService
         var tree = RenderFolderTree(null);
         return tree;
 
-        List<FolderTreeDto> RenderFolderTree(long? parentId = null)
+        List<BookmarkCategoryTreeDto> RenderFolderTree(long? parentId = null)
         {
             return folders.Where(p => p.ParentId == parentId)
                 .Select(c =>
                 {
                     var children = RenderFolderTree(c.Id);
-                    var item = new FolderTreeDto
+                    var item = new BookmarkCategoryTreeDto
                     {
-                        Id = c.Id.ToString(),
-                        Name = c.Name,
+                        Key = c.Id.ToString(),
+                        Label = c.Name,
+                        IsLeaf = !children.Any(),
                         Children = children
                     };
                     return item;

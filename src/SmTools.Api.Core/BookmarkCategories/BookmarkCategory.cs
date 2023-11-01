@@ -1,14 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using SpringMountain.Framework.Domain.Auditing;
+﻿using SpringMountain.Framework.Domain.Auditing;
 using SpringMountain.Framework.Domain.Entities;
 
-namespace SmTools.Api.Core.CbBookmarks;
+namespace SmTools.Api.Core.BookmarkCategories;
 
 /// <summary>
-/// 书签文件夹
+/// 书签分类目录
 /// </summary>
-[Table("folder", Schema = "cbbm")]
-public class Folder : Entity<long>, IHasTimeAuditing
+public class BookmarkCategory : Entity<long>, IHasTimeAuditing
 {
     /// <summary>
     /// 文件夹名称

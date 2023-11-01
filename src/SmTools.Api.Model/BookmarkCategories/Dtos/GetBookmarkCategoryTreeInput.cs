@@ -1,6 +1,6 @@
-﻿namespace SmTools.Api.Model.CbBookmarks.Dtos;
+﻿namespace SmTools.Api.Model.BookmarkCategories.Dtos;
 
-public class GetFolderTreeInput
+public class GetBookmarkCategoryTreeInput
 {
     /// <summary>
     /// 用户 Id，关联 public.user_info 表的主键
