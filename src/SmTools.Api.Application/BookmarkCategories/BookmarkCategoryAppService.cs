@@ -11,11 +11,11 @@ namespace SmTools.Api.Application.BookmarkCategories;
 /// </summary>
 public class BookmarkCategoryAppService : IBookmarkCategoryAppService
 {
-    private readonly IRepository<BookmarkCategory, long> _folderRepository;
+    private readonly IRepository<BookmarkCategory, long> _bookmarkCategoryRepository;
 
-    public BookmarkCategoryAppService(IRepository<BookmarkCategory, long> folderRepository)
+    public BookmarkCategoryAppService(IRepository<BookmarkCategory, long> bookmarkCategoryRepository)
     {
-        _folderRepository = folderRepository;
+        _bookmarkCategoryRepository = bookmarkCategoryRepository;
     }
 
     /// <summary>
@@ -36,7 +36,7 @@ public class BookmarkCategoryAppService : IBookmarkCategoryAppService
             throw new InvalidParameterException("用户 id 不正确");
         }
 
-        var folders = await _folderRepository.GetQueryable()
+        var folders = await _bookmarkCategoryRepository.GetQueryable()
             .Where(p => p.UserId == userIdValue)
             .AsNoTracking().ToListAsync();
         var tree = RenderFolderTree(null);

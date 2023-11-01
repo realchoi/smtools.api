@@ -19,9 +19,9 @@ public class BookmarkItem : Entity<long>, IHasTimeAuditing
     public string Url { get; set; }
 
     /// <summary>
-    /// 所属文件夹的 id，关联 folder 表的主键
+    /// 所属分类目录的 id，关联 bookmark_category 表的主键
     /// </summary>
-    public long FolderId { get; set; }
+    public long CategoryId { get; set; }
 
     /// <summary>
     /// 用户 Id，关联 public.user_info 表的主键
