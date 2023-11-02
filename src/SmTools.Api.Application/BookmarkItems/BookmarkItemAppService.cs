@@ -4,6 +4,7 @@ using SmTools.Api.Core.BookmarkItems;
 using SmTools.Api.Model.BookmarkItems.Dtos;
 using SpringMountain.Api.Exceptions.Contracts.Exceptions.Request;
 using SpringMountain.Framework.Domain.Repositories;
+using SpringMountain.Framework.Snowflake;
 
 namespace SmTools.Api.Application.BookmarkItems;
 
@@ -13,10 +14,69 @@ namespace SmTools.Api.Application.BookmarkItems;
 public class BookmarkItemAppService : IBookmarkItemAppService
 {
     private readonly IRepository<BookmarkItem, long> _bookmarkItemRepository;
+    private readonly ISnowflakeIdMaker _snowflakeIdMaker;
 
-    public BookmarkItemAppService(IRepository<BookmarkItem, long> bookmarkItemRepository)
+    public BookmarkItemAppService(IRepository<BookmarkItem, long> bookmarkItemRepository,
+        ISnowflakeIdMaker snowflakeIdMaker)
     {
         _bookmarkItemRepository = bookmarkItemRepository;
+        _snowflakeIdMaker = snowflakeIdMaker;
+    }
+
+    /// <summary>
+    /// 新建/编辑书签条目
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidParameterException"></exception>
+    public async Task<string> AddOrUpdate(AddOrUpdateBookmarkItemInput input)
+    {
+        if (input.UserId.IsNullOrEmpty())
+        {
+            throw new InvalidParameterException("用户 id 不能为空");
+        }
+
+        if (!long.TryParse(input.UserId, out var userId))
+        {
+            throw new InvalidParameterException("用户 id 不正确");
+        }
+
+        if (input.CategoryId.IsNullOrEmpty())
+        {
+            throw new InvalidParameterException("分类目录 id 不能为空");
+        }
+
+        if (!long.TryParse(input.CategoryId, out var categoryId))
+        {
+            throw new InvalidParameterException("分类目录 id 不正确");
+        }
+
+        long id = 0;
+        if (!input.Id.IsNullOrEmpty())
+        {
+            if (!long.TryParse(input.Id, out id))
+                throw new InvalidParameterException("书签条目 id 不正确");
+        }
+
+        var entity = await _bookmarkItemRepository.GetQueryable()
+            .Where(p => p.UserId == userId && p.CategoryId == categoryId && p.Id == id)
+            .FirstOrDefaultAsync();
+        // 新增
+        if (entity == null)
+        {
+            id = _snowflakeIdMaker.NextId();
+            entity = new BookmarkItem(id, input.Name, input.Url, userId, categoryId);
+            await _bookmarkItemRepository.AddAsync(entity);
+        }
+        // 编辑
+        else
+        {
+            entity.Name = input.Name;
+            entity.Url = input.Url;
+            entity.ModificationTime = DateTime.Now;
+        }
+
+        return id.ToString();
     }
 
     /// <summary>

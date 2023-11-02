@@ -9,6 +9,25 @@ namespace SmTools.Api.Core.BookmarkItems;
 public class BookmarkItem : Entity<long>, IHasTimeAuditing
 {
     /// <summary>
+    /// 创建书签条目
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="name"></param>
+    /// <param name="url"></param>
+    /// <param name="userId"></param>
+    /// <param name="categoryId"></param>
+    public BookmarkItem(long id, string name, string url, long userId, long categoryId)
+    {
+        this.Id = id;
+        this.Name = name;
+        this.Url = url;
+        this.UserId = userId;
+        this.CategoryId = categoryId;
+        this.CreationTime = DateTime.Now;
+        this.ModificationTime = DateTime.Now;
+    }
+
+    /// <summary>
     /// 书签名称
     /// </summary>
     public string Name { get; set; }

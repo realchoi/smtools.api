@@ -8,6 +8,13 @@ namespace SmTools.Api.Application.BookmarkItems;
 public interface IBookmarkItemAppService
 {
     /// <summary>
+    /// 新建/编辑书签条目
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    Task<string> AddOrUpdate(AddOrUpdateBookmarkItemInput input);
+
+    /// <summary>
     /// 获取书签条目列表
     /// </summary>
     /// <param name="input"></param>
