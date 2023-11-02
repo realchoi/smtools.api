@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SmTools.Api.Application.BookmarkCategories;
 using SmTools.Api.Application.BookmarkItems;
 using SmTools.Api.Model.BookmarkCategories.Dtos;
@@ -11,6 +12,7 @@ namespace SmTools.Api.Controllers;
 /// </summary>
 [ApiController]
 [Route("bookmark")]
+[Authorize]
 public class BookmarkController : ControllerBase
 {
     private readonly IBookmarkCategoryAppService _bookmarkCategoryAppService;
