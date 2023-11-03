@@ -19,6 +19,11 @@ public class BookmarkCategoryTreeDto
     /// 是否是叶子节点
     /// </summary>
     public bool IsLeaf { get; set; }
+    
+    /// <summary>
+    /// 父级 id
+    /// </summary>
+    public string? ParentId { get; set; }
 
     /// <summary>
     /// 子集文件夹

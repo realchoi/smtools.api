@@ -119,6 +119,7 @@ public class BookmarkCategoryAppService : IBookmarkCategoryAppService
                         Key = c.Id.ToString(),
                         Label = c.Name,
                         IsLeaf = !children.Any(),
+                        ParentId = parentId?.ToString(),
                         Children = children
                     };
                     return item;
