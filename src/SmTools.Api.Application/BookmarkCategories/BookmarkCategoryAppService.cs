@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmTools.Api.Core.BookmarkCategories;
+using SmTools.Api.Core.BookmarkItems;
 using SmTools.Api.Model.BookmarkCategories.Dtos;
 using SpringMountain.Api.Exceptions.Contracts.Exceptions.Request;
 using SpringMountain.Framework.Domain.Repositories;
@@ -13,12 +14,15 @@ namespace SmTools.Api.Application.BookmarkCategories;
 public class BookmarkCategoryAppService : IBookmarkCategoryAppService
 {
     private readonly IRepository<BookmarkCategory, long> _bookmarkCategoryRepository;
+    private readonly IRepository<BookmarkItem, long> _bookmarkItemRepository;
     private readonly ISnowflakeIdMaker _snowflakeIdMaker;
 
     public BookmarkCategoryAppService(IRepository<BookmarkCategory, long> bookmarkCategoryRepository,
+        IRepository<BookmarkItem, long> bookmarkItemRepository,
         ISnowflakeIdMaker snowflakeIdMaker)
     {
         _bookmarkCategoryRepository = bookmarkCategoryRepository;
+        _bookmarkItemRepository = bookmarkItemRepository;
         _snowflakeIdMaker = snowflakeIdMaker;
     }
 
@@ -124,6 +128,83 @@ public class BookmarkCategoryAppService : IBookmarkCategoryAppService
                     };
                     return item;
                 }).ToList();
+        }
+    }
+
+    /// <summary>
+    /// 删除分类目录
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidParameterException"></exception>
+    public async Task<bool> Delete(string id, string userId)
+    {
+        if (id.IsNullOrEmpty())
+        {
+            throw new InvalidParameterException("分类目录 id 不能为空");
+        }
+
+        if (!long.TryParse(id, out var idValue))
+        {
+            throw new InvalidParameterException("分类目录 id 不正确");
+        }
+
+        if (userId.IsNullOrEmpty())
+        {
+            throw new InvalidParameterException("用户 id 不能为空");
+        }
+
+        if (!long.TryParse(userId, out var userIdValue))
+        {
+            throw new InvalidParameterException("用户 id 不正确");
+        }
+
+        var entity = await _bookmarkCategoryRepository.GetQueryable()
+            .FirstOrDefaultAsync(p => p.UserId == userIdValue && p.Id == idValue);
+        if (entity == null)
+        {
+            throw new InvalidParameterException("分类目录 id 不存在");
+        }
+
+        if (entity.ParentId == null)
+        {
+            throw new InvalidParameterException("顶级文件夹不能删除");
+        }
+
+        var allCategories = await _bookmarkCategoryRepository.GetQueryable()
+            .Where(p => p.UserId == userIdValue)
+            .Select(c => new { c.Id, c.ParentId })
+            .AsNoTracking().ToListAsync();
+
+        await _bookmarkCategoryRepository.RemoveAsync(entity);
+        // 删除所有子孙节点
+        var allChildrenIds = GetChildrenIds(entity.Id);
+        var allChildren = _bookmarkCategoryRepository.GetQueryable()
+            .Where(p => p.UserId == userIdValue && allChildrenIds.Contains(p.Id));
+        await _bookmarkCategoryRepository.RemoveAsync(allChildren);
+
+        // 删除所有书签条目
+        foreach (var categoryId in allChildrenIds.Concat(new List<long> { entity.Id }))
+        {
+            var bookmarkItems = _bookmarkItemRepository.GetQueryable()
+                .Where(p => p.UserId == userIdValue && p.CategoryId == categoryId);
+            await _bookmarkItemRepository.RemoveAsync(bookmarkItems);
+        }
+
+        return true;
+
+        List<long> GetChildrenIds(long? parentId = null)
+        {
+            var result = new List<long>();
+            var childrenIds = allCategories.Where(p => p.ParentId == parentId).Select(c => c.Id).ToList();
+            result.AddRange(childrenIds);
+            foreach (var childrenId in childrenIds)
+            {
+                result.AddRange(GetChildrenIds(childrenId));
+            }
+
+            return result;
         }
     }
 }

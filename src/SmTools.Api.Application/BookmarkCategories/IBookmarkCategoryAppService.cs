@@ -20,4 +20,12 @@ public interface IBookmarkCategoryAppService
     /// <param name="userId">用户 id</param>
     /// <returns></returns>
     Task<List<BookmarkCategoryTreeDto>> GetBookmarkCategoryTree(string userId);
+
+    /// <summary>
+    /// 删除分类目录
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    Task<bool> Delete(string id, string userId);
 }

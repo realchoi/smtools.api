@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SmTools.Api.Application.BookmarkCategories;
 using SmTools.Api.Application.BookmarkItems;
@@ -45,6 +46,18 @@ public class BookmarkController : ControllerBase
     public async Task<List<BookmarkCategoryTreeDto>> GetBookmarkCategoryTree(string userId)
     {
         return await _bookmarkCategoryAppService.GetBookmarkCategoryTree(userId);
+    }
+
+    /// <summary>
+    /// 删除分类目录
+    /// </summary>
+    /// <param name="userId"></param>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpDelete("category/{id}")]
+    public async Task<bool> Delete(string id, [FromQuery, Required] string userId)
+    {
+        return await _bookmarkCategoryAppService.Delete(id, userId);
     }
 
     /// <summary>
