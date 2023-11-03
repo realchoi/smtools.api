@@ -53,7 +53,7 @@ public class JwtHelper
                 audience: _configuration["Jwt:Audience"],
                 claims: claims,
                 notBefore: DateTime.Now,
-                expires: DateTime.Now.AddSeconds(300),
+                expires: DateTime.Now.AddHours(24),
                 signingCredentials: signingCredentials
             );
 

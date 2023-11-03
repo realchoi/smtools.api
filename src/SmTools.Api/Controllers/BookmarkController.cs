@@ -26,6 +26,17 @@ public class BookmarkController : ControllerBase
     }
 
     /// <summary>
+    /// 新建/编辑书签条目
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost("category")]
+    public async Task<string> AddOrUpdate(AddOrUpdateBookmarkCategoryInput input)
+    {
+        return await _bookmarkCategoryAppService.AddOrUpdate(input);
+    }
+
+    /// <summary>
     /// 获取用户的书签文件夹树
     /// </summary>
     /// <param name="userId">用户 id</param>

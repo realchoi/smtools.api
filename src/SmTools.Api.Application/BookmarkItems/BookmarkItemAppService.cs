@@ -64,8 +64,8 @@ public class BookmarkItemAppService : IBookmarkItemAppService
         // 新增
         if (entity == null)
         {
-            id = _snowflakeIdMaker.NextId();
-            entity = new BookmarkItem(id, input.Name, input.Url, userId, categoryId);
+            var newId = _snowflakeIdMaker.NextId();
+            entity = new BookmarkItem(newId, input.Name, input.Url, userId, categoryId);
             await _bookmarkItemRepository.AddAsync(entity);
         }
         // 编辑
@@ -76,7 +76,7 @@ public class BookmarkItemAppService : IBookmarkItemAppService
             entity.ModificationTime = DateTime.Now;
         }
 
-        return id.ToString();
+        return entity.Id.ToString();
     }
 
     /// <summary>

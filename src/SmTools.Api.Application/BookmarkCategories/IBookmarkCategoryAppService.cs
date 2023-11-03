@@ -8,6 +8,13 @@ namespace SmTools.Api.Application.BookmarkCategories;
 public interface IBookmarkCategoryAppService
 {
     /// <summary>
+    /// 新建/编辑书签条目
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    Task<string> AddOrUpdate(AddOrUpdateBookmarkCategoryInput input);
+
+    /// <summary>
     /// 获取用户的书签分类目录树
     /// </summary>
     /// <param name="userId">用户 id</param>

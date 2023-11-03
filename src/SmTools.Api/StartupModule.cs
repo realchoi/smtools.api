@@ -78,7 +78,7 @@ public class StartupModule : CoreModuleBase
             options.OperationFilter<SecurityRequirementsOperationFilter>(true, "Bearer");
             options.SchemaFilter<SwaggerAddEnumDescriptionFilter>();
             // 权限 token
-            options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Description = "请输入带有 Bearer 的 Token，形如“Bearer {Token}”",
                 Name = "Authorization",
@@ -152,7 +152,7 @@ public class StartupModule : CoreModuleBase
 
         app.Use(next => context =>
         {
-            /**
+            /*
              * 说明：在记录审计日志时，需要在 Action 执行完成后再次读取 context.Request.Body（详见 AuditActionAttribute 自定义特性过滤器）。
              * 一般情况下，context.Request.Body 流对象不允许被重复读取，
              * 这是因为 context.Request.Body 流对象的 Position 和 Seek 都是不允许进行修改操作的，一旦操作会直接抛出异常。
