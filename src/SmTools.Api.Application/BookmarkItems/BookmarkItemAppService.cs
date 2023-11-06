@@ -120,4 +120,44 @@ public class BookmarkItemAppService : IBookmarkItemAppService
         }).ToList();
         return result;
     }
+
+    /// <summary>
+    /// 删除书签条目
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidParameterException"></exception>
+    public async Task<bool> Delete(string id, string userId)
+    {
+        if (id.IsNullOrEmpty())
+        {
+            throw new InvalidParameterException("分类目录 id 不能为空");
+        }
+
+        if (!long.TryParse(id, out var idValue))
+        {
+            throw new InvalidParameterException("分类目录 id 不正确");
+        }
+
+        if (userId.IsNullOrEmpty())
+        {
+            throw new InvalidParameterException("用户 id 不能为空");
+        }
+
+        if (!long.TryParse(userId, out var userIdValue))
+        {
+            throw new InvalidParameterException("用户 id 不正确");
+        }
+
+        var entity = await _bookmarkItemRepository.GetQueryable()
+            .FirstOrDefaultAsync(p => p.UserId == userIdValue && p.Id == idValue);
+        if (entity == null)
+        {
+            throw new InvalidParameterException("书签条目 id 不存在");
+        }
+
+        await _bookmarkItemRepository.RemoveAsync(entity);
+        return true;
+    }
 }

@@ -172,7 +172,8 @@ public class BookmarkCategoryAppService : IBookmarkCategoryAppService
             throw new InvalidParameterException("顶级文件夹不能删除");
         }
 
-        var allCategories = await _bookmarkCategoryRepository.GetQueryable()
+        // 当前用户的所有分类目录
+        var allUserCategories = await _bookmarkCategoryRepository.GetQueryable()
             .Where(p => p.UserId == userIdValue)
             .Select(c => new { c.Id, c.ParentId })
             .AsNoTracking().ToListAsync();
@@ -197,7 +198,7 @@ public class BookmarkCategoryAppService : IBookmarkCategoryAppService
         List<long> GetChildrenIds(long? parentId = null)
         {
             var result = new List<long>();
-            var childrenIds = allCategories.Where(p => p.ParentId == parentId).Select(c => c.Id).ToList();
+            var childrenIds = allUserCategories.Where(p => p.ParentId == parentId).Select(c => c.Id).ToList();
             result.AddRange(childrenIds);
             foreach (var childrenId in childrenIds)
             {

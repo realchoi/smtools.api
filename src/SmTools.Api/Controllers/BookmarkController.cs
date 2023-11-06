@@ -55,7 +55,7 @@ public class BookmarkController : ControllerBase
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("category/{id}")]
-    public async Task<bool> Delete(string id, [FromQuery, Required] string userId)
+    public async Task<bool> DeleteBookmarkCategory(string id, [FromQuery, Required] string userId)
     {
         return await _bookmarkCategoryAppService.Delete(id, userId);
     }
@@ -80,5 +80,17 @@ public class BookmarkController : ControllerBase
     public async Task<List<BookmarkItemDto>> GetBookmarkItemList(GetBookmarkItemListInput input)
     {
         return await _bookmarkItemAppService.GetBookmarkItemList(input);
+    }
+
+    /// <summary>
+    /// 删除书签条目
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    [HttpDelete("item/{id}")]
+    public async Task<bool> DeleteBookmarkItem(string id, [FromQuery, Required] string userId)
+    {
+        return await _bookmarkItemAppService.Delete(id, userId);
     }
 }

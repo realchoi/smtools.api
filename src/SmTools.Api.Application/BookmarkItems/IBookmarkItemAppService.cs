@@ -20,4 +20,12 @@ public interface IBookmarkItemAppService
     /// <param name="input"></param>
     /// <returns></returns>
     Task<List<BookmarkItemDto>> GetBookmarkItemList(GetBookmarkItemListInput input);
+
+    /// <summary>
+    /// 删除书签条目
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="userId"></param>
+    /// <returns></returns>
+    Task<bool> Delete(string id, string userId);
 }
