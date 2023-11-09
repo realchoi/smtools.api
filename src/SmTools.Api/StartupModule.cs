@@ -167,15 +167,15 @@ public class StartupModule : CoreModuleBase
         if (env.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
-
-            // 使用 swagger
-            app.UseSwagger();
-            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "SmTools.Api v1"); });
         }
         else
         {
             app.UseHsts();
         }
+
+        // 使用 swagger
+        app.UseSwagger();
+        app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "SmTools.Api v1"); });
 
         // 跨域
         app.UseCors("default");
