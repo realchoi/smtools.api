@@ -25,7 +25,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Publish
-      run: dotnet publish ./src/smtools-api -c Release -r linux-x64 --self-contained false -o deploy
+      run: dotnet publish ./src/SmTools.Api -c Release -r linux-x64 --self-contained false -o deploy
     # 连接到ssh，并且做一个拷贝操作的action
     - name: Deploy 🚀
       uses: cross-the-world/scp-pipeline@master
@@ -34,5 +34,5 @@ jobs:
        user: ${{ secrets.SSH_USER }}
        pass: ${{ secrets.SSH_PASS }}
        connect_timeout: 10s
-       local: './smtools-api/'
+       local: './src/SmTools.Api/'
        remote: /www/smtools-api
