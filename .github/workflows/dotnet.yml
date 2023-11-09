@@ -1,0 +1,38 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-deploy:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Publish
+      run: dotnet publish ./src/smtools-api -c Release -r linux-x64 --self-contained false -o deploy
+    # 连接到ssh，并且做一个拷贝操作的action
+    - name: Deploy 🚀
+      uses: cross-the-world/scp-pipeline@master
+      with:
+       host: ${{ secrets.SSH_HOST }}
+       user: ${{ secrets.SSH_USER }}
+       pass: ${{ secrets.SSH_PASS }}
+       connect_timeout: 10s
+       local: './smtools-api/'
+       remote: /www/smtools-api
