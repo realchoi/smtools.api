@@ -1,3 +1,4 @@
+using NLog.Extensions.Logging;
 using SmTools.Api;
 using SpringMountain.Modularity;
 
@@ -29,6 +30,15 @@ Host.CreateDefaultBuilder(args)
         {
             app.BuildApplicationBuilder();
         });
+    })
+    .ConfigureLogging((hostingContext, logging) =>
+    {
+        logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+        logging.AddConsole();
+        logging.AddDebug();
+        logging.AddEventSourceLogger();
+        // 启用 NLog 作为日志提供程序之一
+        logging.AddNLog();
     })
     .Build()
     .Run();
