@@ -36,3 +36,5 @@ jobs:
        connect_timeout: 10s
        local: './src/SmTools.Api/'
        remote: /www/smtools-api
+       last_ssh: |
+           systemctl restart smtools-api.service # 部署成功后需要重启
