@@ -18,14 +18,12 @@ public abstract class CoreDbContext : DbContext
 {
     private readonly IMediator _mediator;
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly ISnowflakeIdMaker _snowflakeIdMaker;
 
     protected CoreDbContext(DbContextOptions options) : base(options)
     {
         var serviceProvider = options.FindExtension<CoreOptionsExtension>()?.ApplicationServiceProvider;
         _mediator = serviceProvider!.GetRequiredService<IMediator>();
         _httpContextAccessor = serviceProvider!.GetRequiredService<IHttpContextAccessor>();
-        _snowflakeIdMaker = serviceProvider!.GetRequiredService<ISnowflakeIdMaker>();
     }
 
     /// <summary>
@@ -151,7 +149,7 @@ public abstract class CoreDbContext : DbContext
                     // 如果主键不存在，则自动生成
                     if (entry.Entity is Entity<long> longEntity && longEntity.Id <= 0)
                     {
-                        longEntity.Id = _snowflakeIdMaker.NextId();
+                        longEntity.Id = IdGenerator.NextId();
                     }
                     // 自动给创建时间赋值
                     if (entry.Entity is IHasCreationTime creationTime && creationTime.CreationTime == default)
