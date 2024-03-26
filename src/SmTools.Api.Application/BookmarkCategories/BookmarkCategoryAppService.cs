@@ -15,15 +15,12 @@ public class BookmarkCategoryAppService : IBookmarkCategoryAppService
 {
     private readonly IRepository<BookmarkCategory, long> _bookmarkCategoryRepository;
     private readonly IRepository<BookmarkItem, long> _bookmarkItemRepository;
-    private readonly ISnowflakeIdMaker _snowflakeIdMaker;
 
     public BookmarkCategoryAppService(IRepository<BookmarkCategory, long> bookmarkCategoryRepository,
-        IRepository<BookmarkItem, long> bookmarkItemRepository,
-        ISnowflakeIdMaker snowflakeIdMaker)
+        IRepository<BookmarkItem, long> bookmarkItemRepository)
     {
         _bookmarkCategoryRepository = bookmarkCategoryRepository;
         _bookmarkItemRepository = bookmarkItemRepository;
-        _snowflakeIdMaker = snowflakeIdMaker;
     }
 
     /// <summary>
@@ -74,7 +71,7 @@ public class BookmarkCategoryAppService : IBookmarkCategoryAppService
         // 新增
         if (entity == null)
         {
-            var newId = _snowflakeIdMaker.NextId();
+            var newId = IdGenerator.NextId();
             entity = new BookmarkCategory(newId, input.Name, userId, parentId);
             await _bookmarkCategoryRepository.AddAsync(entity);
         }
