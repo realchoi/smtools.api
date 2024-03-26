@@ -194,5 +194,8 @@ public class StartupModule : CoreModuleBase
         app.UseErrorHandlingMiddleware();
 
         app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+
+        // 注入 IServiceProvider 实例
+        IdGenerator.SetServiceProvider(app.ApplicationServices);
     }
 }
