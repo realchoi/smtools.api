@@ -14,13 +14,10 @@ namespace SmTools.Api.Application.BookmarkItems;
 public class BookmarkItemAppService : IBookmarkItemAppService
 {
     private readonly IRepository<BookmarkItem, long> _bookmarkItemRepository;
-    private readonly ISnowflakeIdMaker _snowflakeIdMaker;
 
-    public BookmarkItemAppService(IRepository<BookmarkItem, long> bookmarkItemRepository,
-        ISnowflakeIdMaker snowflakeIdMaker)
+    public BookmarkItemAppService(IRepository<BookmarkItem, long> bookmarkItemRepository)
     {
         _bookmarkItemRepository = bookmarkItemRepository;
-        _snowflakeIdMaker = snowflakeIdMaker;
     }
 
     /// <summary>
@@ -64,7 +61,7 @@ public class BookmarkItemAppService : IBookmarkItemAppService
         // 新增
         if (entity == null)
         {
-            var newId = _snowflakeIdMaker.NextId();
+            var newId = IdGenerator.NextId();
             entity = new BookmarkItem(newId, input.Name, input.Url, userId, categoryId);
             await _bookmarkItemRepository.AddAsync(entity);
         }
