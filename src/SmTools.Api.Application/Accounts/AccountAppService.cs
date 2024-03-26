@@ -19,19 +19,16 @@ namespace SmTools.Api.Application.Accounts;
 public class AccountAppService : IAccountAppService
 {
     private readonly JwtHelper _jwtHelper;
-    private readonly ISnowflakeIdMaker _snowflakeIdMaker;
     private readonly IUnitOfWorkManager _unitOfWorkManager;
     private readonly IRepository<UserAuth, long> _userAuthRepository;
     private readonly IRepository<UserInfo, long> _userInfoRepository;
 
     public AccountAppService(JwtHelper jwtHelper,
-        ISnowflakeIdMaker snowflakeIdMaker,
         IUnitOfWorkManager unitOfWorkManager,
         IRepository<UserAuth, long> userAuthRepository,
         IRepository<UserInfo, long> userInfoRepository)
     {
         _jwtHelper = jwtHelper;
-        _snowflakeIdMaker = snowflakeIdMaker;
         _unitOfWorkManager = unitOfWorkManager;
         _userAuthRepository = userAuthRepository;
         _userInfoRepository = userInfoRepository;
@@ -61,7 +58,7 @@ public class AccountAppService : IAccountAppService
 
         var userInfo = new UserInfo
         {
-            Id = _snowflakeIdMaker.NextId(),
+            Id = IdGenerator.NextId(),
             UserName = userName,
             NickName = registerInput.NickName
         };
