@@ -1,4 +1,6 @@
-﻿namespace SpringMountain.Framework.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace SpringMountain.Framework.Domain.Entities;
 
 /// <summary>
 /// 实体接口
@@ -13,5 +15,6 @@ public interface IEntity
 /// <typeparam name="TKey"></typeparam>
 public interface IEntity<TKey> : IEntity
 {
+    [Comment("主键")]
     TKey Id { get; set; }
 }

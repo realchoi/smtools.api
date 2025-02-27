@@ -19,4 +19,8 @@
     <ProjectReference Include="..\SmTools.Api.Core\SmTools.Api.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

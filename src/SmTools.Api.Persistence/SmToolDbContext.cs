@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
 using SmTools.Api.Core.BookmarkCategories;
 using SmTools.Api.Core.BookmarkItems;
+using SmTools.Api.Core.Systems;
 
 namespace SmTools.Api.Persistence;
 
@@ -36,6 +37,36 @@ public class SmToolDbContext : CoreDbContext
     /// </summary>
     public DbSet<BookmarkItem> BookmarkItems { get; set; }
 
+    /// <summary>
+    /// 权限表
+    /// </summary>
+    public DbSet<Permission> Permissions { get; set; }
+
+    /// <summary>
+    /// 权限组表
+    /// </summary>
+    public DbSet<PermissionGroup> PermissionGroups { get; set; }
+
+    /// <summary>
+    /// 权限组-权限关系表
+    /// </summary>
+    public DbSet<PermissionGroupPermission> PermissionGroupPermissions { get; set; }
+    
+    /// <summary>
+    /// 角色表
+    /// </summary>
+    public DbSet<Role> Roles { get; set; }
+
+    /// <summary>
+    /// 角色-权限关系表
+    /// </summary>
+    public DbSet<RolePermission> RolePermissions { get; set; }  
+
+    /// <summary>
+    /// 角色-用户关系表
+    /// </summary>
+    public DbSet<RoleUser> RoleUsers { get; set; }
+
     public SmToolDbContext(DbContextOptions options) : base(options)
     {
     }
@@ -51,6 +82,14 @@ public class SmToolDbContext : CoreDbContext
         foreach (var type in entityTypes)
         {
             var entity = modelBuilder.Entity(type.ClrType);
+            
+            // 添加表注释（新API方式）
+            var tableComment = type.ClrType.GetCustomAttribute<CommentAttribute>()?.Comment;
+            if (!string.IsNullOrWhiteSpace(tableComment))
+            {
+                entity.ToTable(t => t.HasComment(tableComment));
+            }
+
             // 查看是否自定义了映射表
             var tableAttr = type.ClrType.GetCustomAttribute<TableAttribute>();
             if (string.IsNullOrWhiteSpace(tableAttr?.Name))
@@ -64,6 +103,14 @@ public class SmToolDbContext : CoreDbContext
             foreach (var property in properties)
             {
                 var prop = entity.Property(property.Name);
+                
+                // 添加字段注释（新API方式）
+                var propertyComment = property.GetCustomAttribute<CommentAttribute>()?.Comment;
+                if (!string.IsNullOrWhiteSpace(propertyComment))
+                {
+                    prop.HasComment(propertyComment);
+                }
+
                 // 查看是否自定义了映射字段
                 var columnAttribute = property.GetCustomAttribute<ColumnAttribute>();
                 if (string.IsNullOrWhiteSpace(columnAttribute?.Name))

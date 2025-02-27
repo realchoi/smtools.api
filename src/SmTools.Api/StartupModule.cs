@@ -13,7 +13,8 @@ using SpringMountain.Modularity;
 using SpringMountain.Modularity.Attribute;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
-using SmTools.Api.Middlewares;
+using Microsoft.EntityFrameworkCore;
+using SmTools.Api.Persistence;
 
 namespace SmTools.Api;
 
@@ -149,6 +150,7 @@ public class StartupModule : CoreModuleBase
     {
         var app = context.ApplicationBuilder;
         var env = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
+        var configuration = app.ApplicationServices.GetRequiredService<IConfiguration>();
 
         app.Use(next => context =>
         {
@@ -197,5 +199,31 @@ public class StartupModule : CoreModuleBase
 
         // 注入 IServiceProvider 实例
         IdGenerator.SetServiceProvider(app.ApplicationServices);
+
+        // 检查是否需要初始化数据库
+        bool initDb = configuration.GetValue<bool>("Db:Init");
+        
+        if (initDb)
+        {
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<SmToolDbContext>();
+                
+                // 检查是否有待处理的迁移
+                if (dbContext.Database.GetPendingMigrations().Any())
+                {
+                    // 执行迁移
+                    dbContext.Database.Migrate();
+                }
+                // 检查是否有待处理的种子数据
+                // SeedData(dbContext);
+            }
+        }
     }
+
+    // 可选：种子数据方法
+    // private void SeedData(YourDbContext dbContext)
+    // {
+    //     // 添加种子数据的逻辑
+    // }
 }
