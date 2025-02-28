@@ -9,7 +9,7 @@ namespace SmTools.Api.Controllers;
 /// AI 网站
 /// </summary>
 [ApiController]
-[Route("ai-website")]
+[Route("ai/website")]
 [Authorize]
 public class AiWebsiteController : ControllerBase
 {

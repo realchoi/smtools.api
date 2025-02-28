@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using SpringMountain.Framework.Domain.Auditing;
 using SpringMountain.Framework.Domain.Entities;
 
@@ -7,6 +8,7 @@ namespace SmTools.Api.Core.AiWebsites;
 /// <summary>
 /// AI 网站表
 /// </summary>
+[Table("ai_website")]
 [Comment("AI 网站表")]
 public class AiWebsite : Entity<long>, IHasTimeAuditing
 {
@@ -15,9 +17,11 @@ public class AiWebsite : Entity<long>, IHasTimeAuditing
     /// </summary>
     /// <param name="id"></param>
     /// <param name="name"></param>
-    /// <param name="url"></param>
-    /// <param name="userId"></param>
+    /// <param name="description"></param>
     /// <param name="categoryId"></param>
+    /// <param name="url"></param>
+    /// <param name="logo"></param>
+    /// <param name="tags"></param>
     public AiWebsite(long id, string name, string description,
         long categoryId, string url, string logo, List<string> tags)
     {

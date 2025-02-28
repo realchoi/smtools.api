@@ -5,7 +5,6 @@ using SmTools.Api.Model.AiWebsites.Dtos;
 using SpringMountain.Api.Exceptions.Contracts.Exceptions.Request;
 using SpringMountain.Framework.Domain.Repositories;
 using SpringMountain.Framework.Snowflake;
-using SpringMountain.Framework.Uow;
 
 namespace SmTools.Api.Application.AiWebsites;
 
@@ -14,13 +13,10 @@ namespace SmTools.Api.Application.AiWebsites;
 /// </summary>
 public class AiWebsiteAppService : IAiWebsiteAppService
 {
-    private readonly IUnitOfWorkManager _unitOfWorkManager;
     private readonly IRepository<AiWebsite, long> _aiWebsiteRepository;
 
-    public AiWebsiteAppService(IUnitOfWorkManager unitOfWorkManager,
-        IRepository<AiWebsite, long> aiWebsiteRepository)
+    public AiWebsiteAppService(IRepository<AiWebsite, long> aiWebsiteRepository)
     {
-        _unitOfWorkManager = unitOfWorkManager;
         _aiWebsiteRepository = aiWebsiteRepository;
     }
 
@@ -32,6 +28,8 @@ public class AiWebsiteAppService : IAiWebsiteAppService
     /// <exception cref="InvalidParameterException"></exception>
     public async Task<string> AddOrUpdate(AddOrUpdateAiWebsiteInput input)
     {
+        input.Validate();
+
         if (input.CategoryId.IsNullOrWhiteSpace())
         {
             throw new InvalidParameterException("分类 ID 不能为空");
@@ -50,8 +48,7 @@ public class AiWebsiteAppService : IAiWebsiteAppService
         }
 
         var entity = await _aiWebsiteRepository.GetQueryable()
-            .Where(p => p.CategoryId == categoryId && p.Id == id)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(p => p.CategoryId == categoryId && p.Id == id);
         // 新增
         if (entity == null)
         {
@@ -89,18 +86,18 @@ public class AiWebsiteAppService : IAiWebsiteAppService
             }
         }
 
-        var query = _aiWebsiteRepository.GetQueryable();
+        var query = _aiWebsiteRepository.GetQueryable()
+            .WhereIf(categoryId != 0, x => x.CategoryId == categoryId);
 
         // 关键词搜索
         if (!string.IsNullOrWhiteSpace(input.Keyword))
         {
             input.Keyword = input.Keyword.Trim();
 
-            query = query.WhereIf(categoryId != 0, x => x.CategoryId == categoryId)
-                .Where(x =>
-                    x.Name.ToLower().Contains(input.Keyword.ToLower()) ||
-                    x.Description.ToLower().Contains(input.Keyword.ToLower()) ||
-                    x.Tags.Contains(input.Keyword));
+            query = query.Where(x =>
+                x.Name.ToLower().Contains(input.Keyword.ToLower()) ||
+                x.Description.ToLower().Contains(input.Keyword.ToLower()) ||
+                x.Tags.Contains(input.Keyword));
         }
 
         // 获取总数

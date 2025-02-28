@@ -6,6 +6,8 @@ using SmTools.Api.Persistence.Tools;
 using SpringMountain.Framework.Domain.Repositories;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Reflection;
+using SmTools.Api.Core.AiCategories;
+using SmTools.Api.Core.AiFavorites;
 using SmTools.Api.Core.BookmarkCategories;
 using SmTools.Api.Core.BookmarkItems;
 using SmTools.Api.Core.Systems;
@@ -52,7 +54,7 @@ public class SmToolDbContext : CoreDbContext
     /// 权限组-权限关系表
     /// </summary>
     public DbSet<PermissionGroupPermission> PermissionGroupPermissions { get; set; }
-    
+
     /// <summary>
     /// 角色表
     /// </summary>
@@ -61,7 +63,7 @@ public class SmToolDbContext : CoreDbContext
     /// <summary>
     /// 角色-权限关系表
     /// </summary>
-    public DbSet<RolePermission> RolePermissions { get; set; }  
+    public DbSet<RolePermission> RolePermissions { get; set; }
 
     /// <summary>
     /// 角色-用户关系表
@@ -76,7 +78,12 @@ public class SmToolDbContext : CoreDbContext
     /// <summary>
     /// 收藏网站表
     /// </summary>
-    public DbSet<FavoriteSite> FavoriteSites { get; set; }
+    public DbSet<AiFavorite> AiFavorites { get; set; }
+
+    /// <summary>
+    /// AI 网站分类表
+    /// </summary>
+    public DbSet<AiCategory> AiCategories { get; set; }
 
     public SmToolDbContext(DbContextOptions options) : base(options)
     {
@@ -93,7 +100,7 @@ public class SmToolDbContext : CoreDbContext
         foreach (var type in entityTypes)
         {
             var entity = modelBuilder.Entity(type.ClrType);
-            
+
             // 添加表注释（新API方式）
             var tableComment = type.ClrType.GetCustomAttribute<CommentAttribute>()?.Comment;
             if (!string.IsNullOrWhiteSpace(tableComment))
@@ -114,7 +121,7 @@ public class SmToolDbContext : CoreDbContext
             foreach (var property in properties)
             {
                 var prop = entity.Property(property.Name);
-                
+
                 // 添加字段注释（新API方式）
                 var propertyComment = property.GetCustomAttribute<CommentAttribute>()?.Comment;
                 if (!string.IsNullOrWhiteSpace(propertyComment))
