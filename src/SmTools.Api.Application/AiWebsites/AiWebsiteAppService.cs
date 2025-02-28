@@ -119,13 +119,11 @@ public class AiWebsiteAppService : IAiWebsiteAppService
                 Url = x.Url,
                 Logo = x.Logo,
                 Tags = x.Tags,
-                CreationTime = x.CreationTime
+                CreationTime = x.CreationTime,
+                ModificationTime = x.ModificationTime
             })
             .ToListAsync();
 
-        return new PagedDto<AiWebsiteDto>(items)
-        {
-            Total = total
-        };
+        return new PagedDto<AiWebsiteDto>(items, total);
     }
 }

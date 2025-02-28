@@ -28,8 +28,9 @@ public class PagedInput
 /// </summary>
 public class PagedDto<T> : ListResultDto<T>
 {
-    public PagedDto(IReadOnlyList<T> items) : base(items)
+    public PagedDto(IReadOnlyList<T> items, int total) : base(items)
     {
+        this.Total = total;
     }
 
     /// <summary>
