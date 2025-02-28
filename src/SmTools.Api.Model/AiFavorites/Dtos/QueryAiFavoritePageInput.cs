@@ -6,6 +6,11 @@
 public class QueryAiFavoritePageInput : PagedInput
 {
     /// <summary>
+    /// 用户 Id，关联 user_info 表的主键
+    /// </summary>
+    public string UserId { get; set; }
+
+    /// <summary>
     /// 分类 Id
     /// </summary>
     public string CategoryId { get; set; }

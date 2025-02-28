@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SmTools.Api.Core.AiFavorites;
+using SmTools.Api.Core.AiWebsites;
 using SmTools.Api.Model;
 using SmTools.Api.Model.AiFavorites.Dtos;
 using SmTools.Api.Model.AiWebsites.Dtos;
@@ -15,10 +16,13 @@ namespace SmTools.Api.Application.AiFavorites;
 public class AiFavoriteAppService : IAiFavoriteAppService
 {
     private readonly IRepository<AiFavorite, long> _aiFavoriteRepository;
+    private readonly IRepository<AiWebsite, long> _aiWebsiteRepository;
 
-    public AiFavoriteAppService(IRepository<AiFavorite, long> aiFavoriteRepository)
+    public AiFavoriteAppService(IRepository<AiFavorite, long> aiFavoriteRepository,
+        IRepository<AiWebsite, long> aiWebsiteRepository)
     {
         _aiFavoriteRepository = aiFavoriteRepository;
+        _aiWebsiteRepository = aiWebsiteRepository;
     }
 
     /// <summary>
@@ -78,6 +82,7 @@ public class AiFavoriteAppService : IAiFavoriteAppService
     public async Task<PagedDto<AiWebsiteDto>> QueryPageAsync(QueryAiFavoritePageInput input)
     {
         var categoryId = 0L;
+        var userId = 0L;
 
         if (!input.CategoryId.IsNullOrEmpty())
         {
@@ -87,18 +92,36 @@ public class AiFavoriteAppService : IAiFavoriteAppService
             }
         }
 
-        var query = _aiFavoriteRepository.GetQueryable();
+        if (!input.UserId.IsNullOrEmpty())
+        {
+            if (!long.TryParse(input.UserId, out userId))
+            {
+                throw new InvalidParameterException("用户 ID 不正确");
+            }
+        }
+
+        // 构建查询
+        var query =
+            from favorite in _aiFavoriteRepository.GetQueryable()
+            join website in _aiWebsiteRepository.GetQueryable()
+                on favorite.WebsiteId equals website.Id
+            where favorite.UserId == userId
+            select new { favorite, website };
+
+        // 分类筛选
+        if (categoryId > 0)
+        {
+            query = query.Where(x => x.website.CategoryId == categoryId);
+        }
 
         // 关键词搜索
         if (!string.IsNullOrWhiteSpace(input.Keyword))
         {
-            input.Keyword = input.Keyword.Trim();
-
-            /*query = query.WhereIf(categoryId != 0, x => x.CategoryId == categoryId)
-                .Where(x =>
-                    x.Name.ToLower().Contains(input.Keyword.ToLower()) ||
-                    x.Description.ToLower().Contains(input.Keyword.ToLower()) ||
-                    x.Tags.Contains(input.Keyword));*/
+            input.Keyword = input.Keyword.Trim().ToLower();
+            query = query.Where(x =>
+                x.website.Name.ToLower().Contains(input.Keyword) ||
+                x.website.Description.ToLower().Contains(input.Keyword) ||
+                x.website.Tags.Contains(input.Keyword));
         }
 
         // 获取总数
@@ -106,19 +129,19 @@ public class AiFavoriteAppService : IAiFavoriteAppService
 
         // 分页查询
         var items = await query
-            .OrderByDescending(x => x.CreationTime)
+            .OrderByDescending(x => x.favorite.CreationTime)
             .Skip(input.OffSet).Take(input.PageSize)
             .Select(x => new AiWebsiteDto
             {
-                /*Id = x.Id.ToString(),
-                Name = x.Name,
-                Description = x.Description,
-                CategoryId = x.CategoryId.ToString(),
-                Url = x.Url,
-                Logo = x.Logo,
-                Tags = x.Tags,
-                CreationTime = x.CreationTime,
-                ModificationTime = x.ModificationTime*/
+                Id = x.website.Id.ToString(),
+                Name = x.website.Name,
+                Description = x.website.Description,
+                CategoryId = x.website.CategoryId.ToString(),
+                Url = x.website.Url,
+                Logo = x.website.Logo,
+                Tags = x.website.Tags,
+                CreationTime = x.website.CreationTime,
+                ModificationTime = x.website.ModificationTime
             })
             .ToListAsync();
 
