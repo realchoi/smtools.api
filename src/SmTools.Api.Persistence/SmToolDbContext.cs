@@ -9,6 +9,7 @@ using System.Reflection;
 using SmTools.Api.Core.BookmarkCategories;
 using SmTools.Api.Core.BookmarkItems;
 using SmTools.Api.Core.Systems;
+using SmTools.Api.Core.AiWebsites;
 
 namespace SmTools.Api.Persistence;
 
@@ -66,6 +67,16 @@ public class SmToolDbContext : CoreDbContext
     /// 角色-用户关系表
     /// </summary>
     public DbSet<RoleUser> RoleUsers { get; set; }
+
+    /// <summary>
+    /// AI 网站表
+    /// </summary>
+    public DbSet<AiWebsite> AiWebsites { get; set; }
+
+    /// <summary>
+    /// 收藏网站表
+    /// </summary>
+    public DbSet<FavoriteSite> FavoriteSites { get; set; }
 
     public SmToolDbContext(DbContextOptions options) : base(options)
     {

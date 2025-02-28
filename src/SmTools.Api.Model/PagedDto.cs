@@ -22,3 +22,18 @@ public class PagedInput
     /// </summary>
     public int OffSet => (PageIndex - 1) * PageSize;
 }
+
+/// <summary>
+/// 分页出参
+/// </summary>
+public class PagedDto<T> : ListResultDto<T>
+{
+    public PagedDto(IReadOnlyList<T> items) : base(items)
+    {
+    }
+
+    /// <summary>
+    /// 总数
+    /// </summary>
+    public int Total { get; set; }
+}
