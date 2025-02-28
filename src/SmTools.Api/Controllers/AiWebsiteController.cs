@@ -21,6 +21,18 @@ public class AiWebsiteController : ControllerBase
     }
 
     /// <summary>
+    /// 新建/编辑 AI 网站
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    [HttpPost]
+    public async Task<IActionResult> AddOrUpdate(AddOrUpdateAiWebsiteInput input)
+    {
+        var result = await _aiWebsiteAppService.AddOrUpdate(input);
+        return Ok(result);
+    }
+
+    /// <summary>
     /// 分页查询 AI 网站
     /// </summary>
     /// <param name="input"></param>

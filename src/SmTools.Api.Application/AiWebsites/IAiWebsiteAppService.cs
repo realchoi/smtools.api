@@ -9,6 +9,13 @@ namespace SmTools.Api.Application.AiWebsites;
 public interface IAiWebsiteAppService
 {
     /// <summary>
+    /// 新建/编辑 AI 网站
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    Task<string> AddOrUpdate(AddOrUpdateAiWebsiteInput input);
+    
+    /// <summary>
     /// 分页查询 AI 网站
     /// </summary>
     Task<PagedDto<AiWebsiteDto>> QueryPageAsync(QueryAiWebsitePageInput input);

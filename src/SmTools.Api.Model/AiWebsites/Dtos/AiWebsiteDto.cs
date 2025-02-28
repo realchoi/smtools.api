@@ -18,7 +18,7 @@ public class AiWebsiteDto : IdInput<string>
     /// <summary>
     /// 分类
     /// </summary>
-    public List<string> Category { get; set; }
+    public string CategoryId { get; set; }
 
     /// <summary>
     /// 网站地址
@@ -33,7 +33,7 @@ public class AiWebsiteDto : IdInput<string>
     /// <summary>
     /// 标签
     /// </summary>
-    public string Tags { get; set; }
+    public List<string> Tags { get; set; }
 
     /// <summary>
     /// 创建时间

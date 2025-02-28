@@ -6,6 +6,11 @@
 public class QueryAiWebsitePageInput : PagedInput
 {
     /// <summary>
+    /// 分类 Id
+    /// </summary>
+    public string CategoryId { get; set; }
+
+    /// <summary>
     /// 搜索关键词
     /// </summary>
     public string? Keyword { get; set; }

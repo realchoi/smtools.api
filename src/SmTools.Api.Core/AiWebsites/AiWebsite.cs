@@ -11,6 +11,28 @@ namespace SmTools.Api.Core.AiWebsites;
 public class AiWebsite : Entity<long>, IHasTimeAuditing
 {
     /// <summary>
+    /// 创建 AI 网站
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="name"></param>
+    /// <param name="url"></param>
+    /// <param name="userId"></param>
+    /// <param name="categoryId"></param>
+    public AiWebsite(long id, string name, string description,
+        long categoryId, string url, string logo, List<string> tags)
+    {
+        this.Id = id;
+        this.Name = name;
+        this.Description = description;
+        this.CategoryId = categoryId;
+        this.Url = url;
+        this.Logo = logo;
+        this.Tags = tags;
+        this.CreationTime = DateTime.Now;
+        this.ModificationTime = DateTime.Now;
+    }
+
+    /// <summary>
     /// 名称
     /// </summary>
     [Comment("名称")]
@@ -25,8 +47,8 @@ public class AiWebsite : Entity<long>, IHasTimeAuditing
     /// <summary>
     /// 分类
     /// </summary>
-    [Comment("分类")]
-    public List<string> Category { get; set; }
+    [Comment("分类 Id，关联 website_category 表的主键")]
+    public long CategoryId { get; set; }
 
     /// <summary>
     /// 网站地址
@@ -44,7 +66,7 @@ public class AiWebsite : Entity<long>, IHasTimeAuditing
     /// 标签
     /// </summary>
     [Comment("标签")]
-    public string Tags { get; set; }
+    public List<string> Tags { get; set; }
 
     /// <summary>
     /// 创建时间

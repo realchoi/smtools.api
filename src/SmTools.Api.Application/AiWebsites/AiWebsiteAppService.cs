@@ -2,7 +2,9 @@
 using SmTools.Api.Core.AiWebsites;
 using SmTools.Api.Model;
 using SmTools.Api.Model.AiWebsites.Dtos;
+using SpringMountain.Api.Exceptions.Contracts.Exceptions.Request;
 using SpringMountain.Framework.Domain.Repositories;
+using SpringMountain.Framework.Snowflake;
 using SpringMountain.Framework.Uow;
 
 namespace SmTools.Api.Application.AiWebsites;
@@ -23,10 +25,70 @@ public class AiWebsiteAppService : IAiWebsiteAppService
     }
 
     /// <summary>
+    /// 新建/编辑 AI 网站
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    /// <exception cref="InvalidParameterException"></exception>
+    public async Task<string> AddOrUpdate(AddOrUpdateAiWebsiteInput input)
+    {
+        if (input.CategoryId.IsNullOrWhiteSpace())
+        {
+            throw new InvalidParameterException("分类 ID 不能为空");
+        }
+
+        if (!long.TryParse(input.CategoryId, out var categoryId))
+        {
+            throw new InvalidParameterException("分类 ID 不正确");
+        }
+
+        long id = 0;
+        if (!input.Id.IsNullOrEmpty())
+        {
+            if (!long.TryParse(input.Id, out id))
+                throw new InvalidParameterException("网站 ID 不正确");
+        }
+
+        var entity = await _aiWebsiteRepository.GetQueryable()
+            .Where(p => p.CategoryId == categoryId && p.Id == id)
+            .FirstOrDefaultAsync();
+        // 新增
+        if (entity == null)
+        {
+            var newId = IdGenerator.NextId();
+            entity = new AiWebsite(newId, input.Name, input.Description, categoryId, input.Url, input.Logo, input.Tags);
+            await _aiWebsiteRepository.AddAsync(entity);
+        }
+        // 编辑
+        else
+        {
+            entity.Name = input.Name;
+            entity.Description = input.Description;
+            entity.CategoryId = categoryId;
+            entity.Url = input.Url;
+            entity.Logo = input.Logo;
+            entity.Tags = input.Tags;
+            entity.ModificationTime = DateTime.Now;
+        }
+
+        return entity.Id.ToString();
+    }
+
+    /// <summary>
     /// 分页查询 AI 网站
     /// </summary>
     public async Task<PagedDto<AiWebsiteDto>> QueryPageAsync(QueryAiWebsitePageInput input)
     {
+        var categoryId = 0L;
+
+        if (!input.CategoryId.IsNullOrEmpty())
+        {
+            if (!long.TryParse(input.CategoryId, out categoryId))
+            {
+                throw new InvalidParameterException("分类目录 ID 不正确");
+            }
+        }
+
         var query = _aiWebsiteRepository.GetQueryable();
 
         // 关键词搜索
@@ -34,11 +96,11 @@ public class AiWebsiteAppService : IAiWebsiteAppService
         {
             input.Keyword = input.Keyword.Trim();
 
-            query = query.Where(x =>
-                x.Name.ToLower().Contains(input.Keyword.ToLower()) ||
-                x.Description.ToLower().Contains(input.Keyword.ToLower()) ||
-                x.Category.Contains(input.Keyword) ||
-                x.Tags.Contains(input.Keyword));
+            query = query.WhereIf(categoryId != 0, x => x.CategoryId == categoryId)
+                .Where(x =>
+                    x.Name.ToLower().Contains(input.Keyword.ToLower()) ||
+                    x.Description.ToLower().Contains(input.Keyword.ToLower()) ||
+                    x.Tags.Contains(input.Keyword));
         }
 
         // 获取总数
@@ -53,7 +115,7 @@ public class AiWebsiteAppService : IAiWebsiteAppService
                 Id = x.Id.ToString(),
                 Name = x.Name,
                 Description = x.Description,
-                Category = x.Category,
+                CategoryId = x.CategoryId.ToString(),
                 Url = x.Url,
                 Logo = x.Logo,
                 Tags = x.Tags,
