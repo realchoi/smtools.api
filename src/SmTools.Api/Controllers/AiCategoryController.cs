@@ -38,6 +38,7 @@ public class AiCategoryController : ControllerBase
     /// <param name="input"></param>
     /// <returns></returns>
     [HttpPost("page")]
+    [AllowAnonymous]
     public async Task<IActionResult> QueryPageAsync(QueryAiCategoryPageInput input)
     {
         var result = await _aiCategoryAppService.QueryPageAsync(input);
